@@ -1,40 +1,51 @@
 # Aura Studio
 
-Aura Studio is a free, Android-first AI image-to-image editing app. It is **not** a beauty-camera app, selfie filter app, or collection of static sample thumbnails.
+Aura Studio is a free Android AI image-to-image editor. It is not a beauty-camera app or a static filter gallery.
 
-## Core experience
+## Minimum device target
+- Android 14 (API 34) or newer.
+- 64-bit Android device.
+- 3 GB physical RAM minimum; 4 GB or more recommended.
+- 64 GB device storage target. The app cannot reliably verify the device's advertised total storage capacity, so it checks available free space before model downloads.
+- Keep at least 3 GB free storage before downloading an optional image model; actual model size will be shown before download.
 
-The user starts with their own photo, then chooses how to describe the transformation:
+## Important AI hardware limitation
+The minimum app compatibility target is not a guarantee that every generative model can run locally. Diffusion models can require multiple gigabytes of RAM for weights and intermediate tensors. Aura Studio must benchmark a small, quantized image-to-image model on representative 3 GB devices before claiming local generation support. Devices that cannot run a model locally must receive a clear capability message; the app must not fake results or silently use paid cloud APIs.
 
-1. **Choose from the 250+ style/action catalogue.** Browse searchable, categorized visual command tiles. Each tile has a recognizable icon, name and short plain-language meaning. The user can combine compatible catalogue choices where supported.
-2. **Write a custom instruction.** A free-text description box lets the user explain any desired edit in their own words. The AI understands the request in the context of the uploaded photo.
-3. **Combine both.** A catalogue style can be selected and refined with the user's own description.
+## Main experience
+1. Select a photo from gallery or camera.
+2. Select one or more of 275+ visual transformation styles.
+3. Optionally enter a natural-language editing description.
+4. Tap **Generate**. There is no separate review button or mandatory review screen.
+5. The engine internally interprets the style instructions and custom description.
+6. Run genuine image-to-image inference using the selected photo as the source.
+7. Show real progress and the actual generated result.
+8. Save the result or share it using Android's Sharesheet.
 
-The selected catalogue command or custom instruction is sent through the same image-editing pipeline. The app must transform the user's actual photo using image-to-image inference. Static example images, decorative thumbnails, overlays, or ordinary colour filters are not substitutes for AI image generation.
+## Catalogue
+- Searchable and categorized style catalogue stored at `app/src/main/assets/catalogue/styles.json`.
+- Each style has a unique ID, category, display name, semantic icon and hidden editing instruction.
+- Multi-select is supported; incompatible instructions must be resolved by the interpreter.
+- Do not expose raw prompt strings in the user interface.
 
-## Confirmation-first flow
+## Zero-cost and privacy requirements
+- No paid API, subscription, advertisement, or mandatory account.
+- Prefer on-device inference and offline operation.
+- Any optional cloud fallback must be genuinely free, explicitly disclosed, opt-in, and never required for core app use.
+- Preserve the original photo; generated output is saved separately.
 
-Photo -> choose one or more catalogue styles and/or enter custom description -> AI interprets the request -> show a plain-language Edit Plan -> user confirms / revises / cancels -> image-to-image generation -> actual output -> save/share.
+## Current implementation status
+- Android minimum SDK 34 and target SDK 36 configured.
+- Gallery/camera input, catalogue, search, category filters, multi-selection and custom description are implemented.
+- Actual image-to-image model and inference runtime are not yet integrated.
+- Real generation progress, output saving and output sharing remain to be implemented and tested.
 
-The Edit Plan must describe the requested changes, subject/identity preservation, background, lighting, colour, composition, style and any ambiguity. Generation starts only after explicit confirmation.
+## Development sequence
+1. Establish the Android 14 / 3 GB / 64 GB compatibility baseline.
+2. Add device diagnostics and memory-safe image preprocessing.
+3. Benchmark candidate small/quantized image-to-image models and runtimes.
+4. Implement a working inference proof of concept.
+5. Integrate it behind the single Generate action.
+6. Add actual progress, result comparison, save and share.
 
-## Catalogue requirements
-
-- Target at least 250 useful commands/styles, organized by category and searchable.
-- Use icon tiles with concise names and descriptions; icons should communicate the visual concept, not act as beauty-camera controls.
-- Catalogue selection is an instruction/template for image-to-image transformation, not a local cosmetic filter.
-- Keep internal prompt strings hidden from end users.
-- Support a custom natural-language description at all times.
-- Allow catalogue + custom instruction composition with conflict detection.
-
-## Honest implementation status
-
-Current Android prototype has gallery/camera input, 20 starter effect metadata entries, custom text input and a basic keyword-based Edit Plan preview. It does **not** yet implement the 250-item catalogue, genuine AI instruction understanding, image-to-image inference, real generation progress, or completed image export. The current 20 entries are starter catalogue data, not the final scope. Do not describe the app as generating images until the model actually runs and returns an edited image.
-
-## Free/offline goal
-
-No paid API, subscription, advertisements or account requirement. Prefer local model inference, but validate model licence, runtime compatibility, model size, RAM, latency, thermals, battery and output quality on target devices. If a device cannot run the model, clearly explain the limitation rather than silently using a paid endpoint or pretending to generate.
-
-## Output
-
-Preserve the source image. Save generated results as new files and share only a real generated output using Android's native Sharesheet.
+Do not claim that Aura Studio generates images until an actual model returns a transformed image.
