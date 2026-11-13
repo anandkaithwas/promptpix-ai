@@ -55,7 +55,7 @@ private fun decodePreviewForInference(context: Context, uri: Uri, maxEdge: Int =
     if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
 
     var sample = 1
-    while (bounds.outWidth / (sample * 2) >= maxEdge && bounds.outHeight / (sample * 2) >= maxEdge) {
+    while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= maxEdge) {
         sample *= 2
     }
     val options = BitmapFactory.Options().apply {
