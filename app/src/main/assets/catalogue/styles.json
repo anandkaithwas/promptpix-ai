@@ -1,0 +1,1990 @@
+{
+  "schemaVersion": 1,
+  "product": "Aura Studio",
+  "purpose": "Selectable image-to-image transformations, not camera filters or static previews.",
+  "count": 275,
+  "categories": [
+    {
+      "name": "Photography & Image Quality",
+      "icon": "camera",
+      "count": 25
+    },
+    {
+      "name": "Camera Angles & Framing",
+      "icon": "camera",
+      "count": 25
+    },
+    {
+      "name": "Lighting & Depth",
+      "icon": "sun",
+      "count": 25
+    },
+    {
+      "name": "Weather & Atmosphere",
+      "icon": "cloud",
+      "count": 25
+    },
+    {
+      "name": "Colour & Film Looks",
+      "icon": "palette",
+      "count": 25
+    },
+    {
+      "name": "Motion & Exposure",
+      "icon": "move",
+      "count": 25
+    },
+    {
+      "name": "Art & Illustration",
+      "icon": "brush",
+      "count": 25
+    },
+    {
+      "name": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "count": 25
+    },
+    {
+      "name": "Nature, Places & Environment",
+      "icon": "trees",
+      "count": 25
+    },
+    {
+      "name": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "count": 25
+    },
+    {
+      "name": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "count": 25
+    }
+  ],
+  "styles": [
+    {
+      "id": "photorealistic",
+      "name": "Photorealistic",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a photorealistic transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as photorealistic. Keep the result coherent and high quality."
+    },
+    {
+      "id": "ultra-realistic",
+      "name": "Ultra Realistic",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a ultra realistic transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as ultra realistic. Keep the result coherent and high quality."
+    },
+    {
+      "id": "hyperrealistic",
+      "name": "Hyperrealistic",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a hyperrealistic transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as hyperrealistic. Keep the result coherent and high quality."
+    },
+    {
+      "id": "hdr-photography",
+      "name": "HDR Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a hdr photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as hdr photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "8k-detail",
+      "name": "8K Detail",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a 8k detail transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as 8k detail. Keep the result coherent and high quality."
+    },
+    {
+      "id": "4k-detail",
+      "name": "4K Detail",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a 4k detail transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as 4k detail. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dslr-photography",
+      "name": "DSLR Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a dslr photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dslr photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "professional-portrait",
+      "name": "Professional Portrait",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a professional portrait transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as professional portrait. Keep the result coherent and high quality."
+    },
+    {
+      "id": "editorial-photography",
+      "name": "Editorial Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a editorial photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as editorial photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "documentary-photography",
+      "name": "Documentary Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a documentary photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as documentary photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "street-photography",
+      "name": "Street Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a street photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as street photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "fashion-photography",
+      "name": "Fashion Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a fashion photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as fashion photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "beauty-editorial",
+      "name": "Beauty Editorial",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a beauty editorial transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as beauty editorial. Keep the result coherent and high quality."
+    },
+    {
+      "id": "fine-art-photography",
+      "name": "Fine Art Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a fine art photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as fine art photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "commercial-photography",
+      "name": "Commercial Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a commercial photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as commercial photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "product-photography",
+      "name": "Product Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a product photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as product photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "food-photography",
+      "name": "Food Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a food photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as food photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "architectural-photography",
+      "name": "Architectural Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a architectural photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as architectural photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "travel-photography",
+      "name": "Travel Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a travel photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as travel photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "wildlife-photography",
+      "name": "Wildlife Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a wildlife photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as wildlife photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "sports-photography",
+      "name": "Sports Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a sports photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as sports photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "wedding-photography",
+      "name": "Wedding Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a wedding photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as wedding photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cinematic-photography",
+      "name": "Cinematic Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a cinematic photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cinematic photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "analog-photography",
+      "name": "Analog Photography",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a analog photography transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as analog photography. Keep the result coherent and high quality."
+    },
+    {
+      "id": "instant-film",
+      "name": "Instant Film",
+      "category": "Photography & Image Quality",
+      "icon": "camera",
+      "instruction": "Apply a instant film transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as instant film. Keep the result coherent and high quality."
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a close up transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as close up. Keep the result coherent and high quality."
+    },
+    {
+      "id": "extreme-close-up",
+      "name": "Extreme Close Up",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a extreme close up transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as extreme close up. Keep the result coherent and high quality."
+    },
+    {
+      "id": "wide-angle",
+      "name": "Wide Angle",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a wide angle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as wide angle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "ultra-wide-angle",
+      "name": "Ultra Wide Angle",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a ultra wide angle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as ultra wide angle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "fisheye-lens",
+      "name": "Fisheye Lens",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a fisheye lens transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as fisheye lens. Keep the result coherent and high quality."
+    },
+    {
+      "id": "top-down",
+      "name": "Top Down",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a top down transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as top down. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bird-s-eye-view",
+      "name": "Bird's Eye View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a bird's eye view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bird's eye view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "worm-s-eye-view",
+      "name": "Worm's Eye View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a worm's eye view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as worm's eye view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "low-angle",
+      "name": "Low Angle",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a low angle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as low angle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "high-angle",
+      "name": "High Angle",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a high angle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as high angle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "side-profile",
+      "name": "Side Profile",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a side profile transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as side profile. Keep the result coherent and high quality."
+    },
+    {
+      "id": "three-quarter-view",
+      "name": "Three Quarter View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a three quarter view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as three quarter view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "over-the-shoulder",
+      "name": "Over The Shoulder",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a over the shoulder transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as over the shoulder. Keep the result coherent and high quality."
+    },
+    {
+      "id": "point-of-view",
+      "name": "Point Of View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a point of view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as point of view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "aerial-view",
+      "name": "Aerial View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a aerial view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as aerial view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "drone-view",
+      "name": "Drone View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a drone view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as drone view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dutch-angle",
+      "name": "Dutch Angle",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a dutch angle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dutch angle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "eye-level",
+      "name": "Eye Level",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a eye level transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as eye level. Keep the result coherent and high quality."
+    },
+    {
+      "id": "full-body-frame",
+      "name": "Full Body Frame",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a full body frame transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as full body frame. Keep the result coherent and high quality."
+    },
+    {
+      "id": "medium-shot",
+      "name": "Medium Shot",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a medium shot transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as medium shot. Keep the result coherent and high quality."
+    },
+    {
+      "id": "headshot",
+      "name": "Headshot",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a headshot transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as headshot. Keep the result coherent and high quality."
+    },
+    {
+      "id": "macro-view",
+      "name": "Macro View",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a macro view transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as macro view. Keep the result coherent and high quality."
+    },
+    {
+      "id": "panoramic-frame",
+      "name": "Panoramic Frame",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a panoramic frame transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as panoramic frame. Keep the result coherent and high quality."
+    },
+    {
+      "id": "symmetrical-frame",
+      "name": "Symmetrical Frame",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a symmetrical frame transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as symmetrical frame. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rule-of-thirds",
+      "name": "Rule Of Thirds",
+      "category": "Camera Angles & Framing",
+      "icon": "camera",
+      "instruction": "Apply a rule of thirds transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rule of thirds. Keep the result coherent and high quality."
+    },
+    {
+      "id": "soft-lighting",
+      "name": "Soft Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a soft lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as soft lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dramatic-lighting",
+      "name": "Dramatic Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a dramatic lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dramatic lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rembrandt-lighting",
+      "name": "Rembrandt Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a rembrandt lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rembrandt lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rim-lighting",
+      "name": "Rim Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a rim lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rim lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "backlighting",
+      "name": "Backlighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a backlighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as backlighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "god-rays",
+      "name": "God Rays",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a god rays transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as god rays. Keep the result coherent and high quality."
+    },
+    {
+      "id": "volumetric-light",
+      "name": "Volumetric Light",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a volumetric light transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as volumetric light. Keep the result coherent and high quality."
+    },
+    {
+      "id": "studio-lighting",
+      "name": "Studio Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a studio lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as studio lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "butterfly-lighting",
+      "name": "Butterfly Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a butterfly lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as butterfly lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "split-lighting",
+      "name": "Split Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a split lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as split lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "loop-lighting",
+      "name": "Loop Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a loop lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as loop lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "broad-lighting",
+      "name": "Broad Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a broad lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as broad lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "short-lighting",
+      "name": "Short Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a short lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as short lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "hard-light",
+      "name": "Hard Light",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a hard light transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as hard light. Keep the result coherent and high quality."
+    },
+    {
+      "id": "diffused-light",
+      "name": "Diffused Light",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a diffused light transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as diffused light. Keep the result coherent and high quality."
+    },
+    {
+      "id": "golden-hour-light",
+      "name": "Golden Hour Light",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a golden hour light transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as golden hour light. Keep the result coherent and high quality."
+    },
+    {
+      "id": "blue-hour-light",
+      "name": "Blue Hour Light",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a blue hour light transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as blue hour light. Keep the result coherent and high quality."
+    },
+    {
+      "id": "candlelight",
+      "name": "Candlelight",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a candlelight transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as candlelight. Keep the result coherent and high quality."
+    },
+    {
+      "id": "neon-lighting",
+      "name": "Neon Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a neon lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as neon lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "silhouette-lighting",
+      "name": "Silhouette Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a silhouette lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as silhouette lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "chiaroscuro",
+      "name": "Chiaroscuro",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a chiaroscuro transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as chiaroscuro. Keep the result coherent and high quality."
+    },
+    {
+      "id": "high-key-lighting",
+      "name": "High Key Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a high key lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as high key lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "low-key-lighting",
+      "name": "Low Key Lighting",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a low key lighting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as low key lighting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "window-light",
+      "name": "Window Light",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a window light transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as window light. Keep the result coherent and high quality."
+    },
+    {
+      "id": "spotlight",
+      "name": "Spotlight",
+      "category": "Lighting & Depth",
+      "icon": "sun",
+      "instruction": "Apply a spotlight transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as spotlight. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rain",
+      "name": "Rain",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a rain transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rain. Keep the result coherent and high quality."
+    },
+    {
+      "id": "heavy-rain",
+      "name": "Heavy Rain",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a heavy rain transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as heavy rain. Keep the result coherent and high quality."
+    },
+    {
+      "id": "storm",
+      "name": "Storm",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a storm transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as storm. Keep the result coherent and high quality."
+    },
+    {
+      "id": "thunderstorm",
+      "name": "Thunderstorm",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a thunderstorm transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as thunderstorm. Keep the result coherent and high quality."
+    },
+    {
+      "id": "snowfall",
+      "name": "Snowfall",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a snowfall transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as snowfall. Keep the result coherent and high quality."
+    },
+    {
+      "id": "blizzard",
+      "name": "Blizzard",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a blizzard transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as blizzard. Keep the result coherent and high quality."
+    },
+    {
+      "id": "fog",
+      "name": "Fog",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a fog transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as fog. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dense-fog",
+      "name": "Dense Fog",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a dense fog transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dense fog. Keep the result coherent and high quality."
+    },
+    {
+      "id": "morning-mist",
+      "name": "Morning Mist",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a morning mist transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as morning mist. Keep the result coherent and high quality."
+    },
+    {
+      "id": "haze",
+      "name": "Haze",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a haze transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as haze. Keep the result coherent and high quality."
+    },
+    {
+      "id": "smoky-atmosphere",
+      "name": "Smoky Atmosphere",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a smoky atmosphere transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as smoky atmosphere. Keep the result coherent and high quality."
+    },
+    {
+      "id": "sunrise",
+      "name": "Sunrise",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a sunrise transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as sunrise. Keep the result coherent and high quality."
+    },
+    {
+      "id": "sunset",
+      "name": "Sunset",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a sunset transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as sunset. Keep the result coherent and high quality."
+    },
+    {
+      "id": "golden-hour",
+      "name": "Golden Hour",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a golden hour transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as golden hour. Keep the result coherent and high quality."
+    },
+    {
+      "id": "blue-hour",
+      "name": "Blue Hour",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a blue hour transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as blue hour. Keep the result coherent and high quality."
+    },
+    {
+      "id": "moonlight",
+      "name": "Moonlight",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a moonlight transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as moonlight. Keep the result coherent and high quality."
+    },
+    {
+      "id": "starry-night",
+      "name": "Starry Night",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a starry night transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as starry night. Keep the result coherent and high quality."
+    },
+    {
+      "id": "overcast-sky",
+      "name": "Overcast Sky",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a overcast sky transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as overcast sky. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dramatic-clouds",
+      "name": "Dramatic Clouds",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a dramatic clouds transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dramatic clouds. Keep the result coherent and high quality."
+    },
+    {
+      "id": "aurora-borealis",
+      "name": "Aurora Borealis",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a aurora borealis transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as aurora borealis. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dust-storm",
+      "name": "Dust Storm",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a dust storm transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dust storm. Keep the result coherent and high quality."
+    },
+    {
+      "id": "underwater-atmosphere",
+      "name": "Underwater Atmosphere",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a underwater atmosphere transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as underwater atmosphere. Keep the result coherent and high quality."
+    },
+    {
+      "id": "misty-mountains",
+      "name": "Misty Mountains",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a misty mountains transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as misty mountains. Keep the result coherent and high quality."
+    },
+    {
+      "id": "tropical-humidity",
+      "name": "Tropical Humidity",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a tropical humidity transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as tropical humidity. Keep the result coherent and high quality."
+    },
+    {
+      "id": "volumetric-atmosphere",
+      "name": "Volumetric Atmosphere",
+      "category": "Weather & Atmosphere",
+      "icon": "cloud",
+      "instruction": "Apply a volumetric atmosphere transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as volumetric atmosphere. Keep the result coherent and high quality."
+    },
+    {
+      "id": "monochrome",
+      "name": "Monochrome",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a monochrome transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as monochrome. Keep the result coherent and high quality."
+    },
+    {
+      "id": "black-and-white",
+      "name": "Black And White",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a black and white transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as black and white. Keep the result coherent and high quality."
+    },
+    {
+      "id": "sepia",
+      "name": "Sepia",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a sepia transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as sepia. Keep the result coherent and high quality."
+    },
+    {
+      "id": "teal-and-orange",
+      "name": "Teal And Orange",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a teal and orange transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as teal and orange. Keep the result coherent and high quality."
+    },
+    {
+      "id": "pastel-palette",
+      "name": "Pastel Palette",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a pastel palette transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as pastel palette. Keep the result coherent and high quality."
+    },
+    {
+      "id": "vibrant-colours",
+      "name": "Vibrant Colours",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a vibrant colours transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as vibrant colours. Keep the result coherent and high quality."
+    },
+    {
+      "id": "muted-colours",
+      "name": "Muted Colours",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a muted colours transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as muted colours. Keep the result coherent and high quality."
+    },
+    {
+      "id": "warm-colour-grade",
+      "name": "Warm Colour Grade",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a warm colour grade transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as warm colour grade. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cool-colour-grade",
+      "name": "Cool Colour Grade",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a cool colour grade transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cool colour grade. Keep the result coherent and high quality."
+    },
+    {
+      "id": "matte-finish",
+      "name": "Matte Finish",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a matte finish transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as matte finish. Keep the result coherent and high quality."
+    },
+    {
+      "id": "film-grain",
+      "name": "Film Grain",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a film grain transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as film grain. Keep the result coherent and high quality."
+    },
+    {
+      "id": "35mm-film",
+      "name": "35mm Film",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a 35mm film transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as 35mm film. Keep the result coherent and high quality."
+    },
+    {
+      "id": "16mm-film",
+      "name": "16mm Film",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a 16mm film transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as 16mm film. Keep the result coherent and high quality."
+    },
+    {
+      "id": "vintage-film",
+      "name": "Vintage Film",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a vintage film transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as vintage film. Keep the result coherent and high quality."
+    },
+    {
+      "id": "kodachrome-look",
+      "name": "Kodachrome Look",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a kodachrome look transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as kodachrome look. Keep the result coherent and high quality."
+    },
+    {
+      "id": "portra-film-look",
+      "name": "Portra Film Look",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a portra film look transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as portra film look. Keep the result coherent and high quality."
+    },
+    {
+      "id": "faded-film",
+      "name": "Faded Film",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a faded film transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as faded film. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cross-processed-film",
+      "name": "Cross Processed Film",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a cross processed film transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cross processed film. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bleach-bypass",
+      "name": "Bleach Bypass",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a bleach bypass transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bleach bypass. Keep the result coherent and high quality."
+    },
+    {
+      "id": "duotone",
+      "name": "Duotone",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a duotone transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as duotone. Keep the result coherent and high quality."
+    },
+    {
+      "id": "tri-tone",
+      "name": "Tri Tone",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a tri tone transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as tri tone. Keep the result coherent and high quality."
+    },
+    {
+      "id": "infrared-colour",
+      "name": "Infrared Colour",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a infrared colour transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as infrared colour. Keep the result coherent and high quality."
+    },
+    {
+      "id": "split-toning",
+      "name": "Split Toning",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a split toning transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as split toning. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cinematic-colour-grade",
+      "name": "Cinematic Colour Grade",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a cinematic colour grade transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cinematic colour grade. Keep the result coherent and high quality."
+    },
+    {
+      "id": "natural-skin-tones",
+      "name": "Natural Skin Tones",
+      "category": "Colour & Film Looks",
+      "icon": "palette",
+      "instruction": "Apply a natural skin tones transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as natural skin tones. Keep the result coherent and high quality."
+    },
+    {
+      "id": "motion-blur",
+      "name": "Motion Blur",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a motion blur transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as motion blur. Keep the result coherent and high quality."
+    },
+    {
+      "id": "long-exposure",
+      "name": "Long Exposure",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a long exposure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as long exposure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "light-trails",
+      "name": "Light Trails",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a light trails transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as light trails. Keep the result coherent and high quality."
+    },
+    {
+      "id": "freeze-action",
+      "name": "Freeze Action",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a freeze action transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as freeze action. Keep the result coherent and high quality."
+    },
+    {
+      "id": "panning-shot",
+      "name": "Panning Shot",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a panning shot transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as panning shot. Keep the result coherent and high quality."
+    },
+    {
+      "id": "slow-shutter",
+      "name": "Slow Shutter",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a slow shutter transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as slow shutter. Keep the result coherent and high quality."
+    },
+    {
+      "id": "time-lapse",
+      "name": "Time Lapse",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a time lapse transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as time lapse. Keep the result coherent and high quality."
+    },
+    {
+      "id": "zoom-burst",
+      "name": "Zoom Burst",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a zoom burst transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as zoom burst. Keep the result coherent and high quality."
+    },
+    {
+      "id": "kinetic-motion",
+      "name": "Kinetic Motion",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a kinetic motion transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as kinetic motion. Keep the result coherent and high quality."
+    },
+    {
+      "id": "flowing-fabric-motion",
+      "name": "Flowing Fabric Motion",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a flowing fabric motion transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as flowing fabric motion. Keep the result coherent and high quality."
+    },
+    {
+      "id": "waterfall-long-exposure",
+      "name": "Waterfall Long Exposure",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a waterfall long exposure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as waterfall long exposure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "traffic-light-trails",
+      "name": "Traffic Light Trails",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a traffic light trails transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as traffic light trails. Keep the result coherent and high quality."
+    },
+    {
+      "id": "star-trails",
+      "name": "Star Trails",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a star trails transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as star trails. Keep the result coherent and high quality."
+    },
+    {
+      "id": "silky-water",
+      "name": "Silky Water",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a silky water transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as silky water. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dynamic-sports-action",
+      "name": "Dynamic Sports Action",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a dynamic sports action transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dynamic sports action. Keep the result coherent and high quality."
+    },
+    {
+      "id": "wind-swept-motion",
+      "name": "Wind Swept Motion",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a wind swept motion transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as wind swept motion. Keep the result coherent and high quality."
+    },
+    {
+      "id": "ghosting-exposure",
+      "name": "Ghosting Exposure",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a ghosting exposure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as ghosting exposure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "multiple-exposure",
+      "name": "Multiple Exposure",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a multiple exposure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as multiple exposure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "double-exposure",
+      "name": "Double Exposure",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a double exposure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as double exposure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "high-speed-flash",
+      "name": "High Speed Flash",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a high speed flash transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as high speed flash. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rotational-blur",
+      "name": "Rotational Blur",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a rotational blur transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rotational blur. Keep the result coherent and high quality."
+    },
+    {
+      "id": "directional-blur",
+      "name": "Directional Blur",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a directional blur transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as directional blur. Keep the result coherent and high quality."
+    },
+    {
+      "id": "motion-freeze",
+      "name": "Motion Freeze",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a motion freeze transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as motion freeze. Keep the result coherent and high quality."
+    },
+    {
+      "id": "night-traffic-exposure",
+      "name": "Night Traffic Exposure",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a night traffic exposure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as night traffic exposure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "moving-crowd-blur",
+      "name": "Moving Crowd Blur",
+      "category": "Motion & Exposure",
+      "icon": "move",
+      "instruction": "Apply a moving crowd blur transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as moving crowd blur. Keep the result coherent and high quality."
+    },
+    {
+      "id": "watercolour",
+      "name": "Watercolour",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a watercolour transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as watercolour. Keep the result coherent and high quality."
+    },
+    {
+      "id": "oil-painting",
+      "name": "Oil Painting",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a oil painting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as oil painting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "acrylic-painting",
+      "name": "Acrylic Painting",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a acrylic painting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as acrylic painting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "charcoal-drawing",
+      "name": "Charcoal Drawing",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a charcoal drawing transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as charcoal drawing. Keep the result coherent and high quality."
+    },
+    {
+      "id": "pencil-sketch",
+      "name": "Pencil Sketch",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a pencil sketch transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as pencil sketch. Keep the result coherent and high quality."
+    },
+    {
+      "id": "ink-drawing",
+      "name": "Ink Drawing",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a ink drawing transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as ink drawing. Keep the result coherent and high quality."
+    },
+    {
+      "id": "line-art",
+      "name": "Line Art",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a line art transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as line art. Keep the result coherent and high quality."
+    },
+    {
+      "id": "digital-painting",
+      "name": "Digital Painting",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a digital painting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as digital painting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "anime",
+      "name": "Anime",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a anime transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as anime. Keep the result coherent and high quality."
+    },
+    {
+      "id": "manga",
+      "name": "Manga",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a manga transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as manga. Keep the result coherent and high quality."
+    },
+    {
+      "id": "comic-book",
+      "name": "Comic Book",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a comic book transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as comic book. Keep the result coherent and high quality."
+    },
+    {
+      "id": "graphic-novel",
+      "name": "Graphic Novel",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a graphic novel transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as graphic novel. Keep the result coherent and high quality."
+    },
+    {
+      "id": "pop-art",
+      "name": "Pop Art",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a pop art transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as pop art. Keep the result coherent and high quality."
+    },
+    {
+      "id": "pixel-art",
+      "name": "Pixel Art",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a pixel art transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as pixel art. Keep the result coherent and high quality."
+    },
+    {
+      "id": "low-poly-art",
+      "name": "Low Poly Art",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a low poly art transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as low poly art. Keep the result coherent and high quality."
+    },
+    {
+      "id": "vector-illustration",
+      "name": "Vector Illustration",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a vector illustration transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as vector illustration. Keep the result coherent and high quality."
+    },
+    {
+      "id": "papercut-art",
+      "name": "Papercut Art",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a papercut art transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as papercut art. Keep the result coherent and high quality."
+    },
+    {
+      "id": "stained-glass",
+      "name": "Stained Glass",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a stained glass transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as stained glass. Keep the result coherent and high quality."
+    },
+    {
+      "id": "gouache-painting",
+      "name": "Gouache Painting",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a gouache painting transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as gouache painting. Keep the result coherent and high quality."
+    },
+    {
+      "id": "pastel-drawing",
+      "name": "Pastel Drawing",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a pastel drawing transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as pastel drawing. Keep the result coherent and high quality."
+    },
+    {
+      "id": "crayon-illustration",
+      "name": "Crayon Illustration",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a crayon illustration transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as crayon illustration. Keep the result coherent and high quality."
+    },
+    {
+      "id": "woodcut-print",
+      "name": "Woodcut Print",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a woodcut print transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as woodcut print. Keep the result coherent and high quality."
+    },
+    {
+      "id": "etching",
+      "name": "Etching",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a etching transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as etching. Keep the result coherent and high quality."
+    },
+    {
+      "id": "art-nouveau",
+      "name": "Art Nouveau",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a art nouveau transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as art nouveau. Keep the result coherent and high quality."
+    },
+    {
+      "id": "art-deco",
+      "name": "Art Deco",
+      "category": "Art & Illustration",
+      "icon": "brush",
+      "instruction": "Apply a art deco transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as art deco. Keep the result coherent and high quality."
+    },
+    {
+      "id": "fantasy-world",
+      "name": "Fantasy World",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a fantasy world transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as fantasy world. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dark-fantasy",
+      "name": "Dark Fantasy",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a dark fantasy transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dark fantasy. Keep the result coherent and high quality."
+    },
+    {
+      "id": "high-fantasy",
+      "name": "High Fantasy",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a high fantasy transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as high fantasy. Keep the result coherent and high quality."
+    },
+    {
+      "id": "science-fiction",
+      "name": "Science Fiction",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a science fiction transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as science fiction. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cyberpunk",
+      "name": "Cyberpunk",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a cyberpunk transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cyberpunk. Keep the result coherent and high quality."
+    },
+    {
+      "id": "steampunk",
+      "name": "Steampunk",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a steampunk transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as steampunk. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dieselpunk",
+      "name": "Dieselpunk",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a dieselpunk transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dieselpunk. Keep the result coherent and high quality."
+    },
+    {
+      "id": "solarpunk",
+      "name": "Solarpunk",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a solarpunk transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as solarpunk. Keep the result coherent and high quality."
+    },
+    {
+      "id": "futuristic-city",
+      "name": "Futuristic City",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a futuristic city transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as futuristic city. Keep the result coherent and high quality."
+    },
+    {
+      "id": "alien-world",
+      "name": "Alien World",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a alien world transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as alien world. Keep the result coherent and high quality."
+    },
+    {
+      "id": "space-opera",
+      "name": "Space Opera",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a space opera transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as space opera. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cosmic-scene",
+      "name": "Cosmic Scene",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a cosmic scene transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cosmic scene. Keep the result coherent and high quality."
+    },
+    {
+      "id": "holographic-world",
+      "name": "Holographic World",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a holographic world transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as holographic world. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dreamscape",
+      "name": "Dreamscape",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a dreamscape transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dreamscape. Keep the result coherent and high quality."
+    },
+    {
+      "id": "surrealism",
+      "name": "Surrealism",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a surrealism transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as surrealism. Keep the result coherent and high quality."
+    },
+    {
+      "id": "mythological-scene",
+      "name": "Mythological Scene",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a mythological scene transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as mythological scene. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dragon-fantasy",
+      "name": "Dragon Fantasy",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a dragon fantasy transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dragon fantasy. Keep the result coherent and high quality."
+    },
+    {
+      "id": "enchanted-forest",
+      "name": "Enchanted Forest",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a enchanted forest transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as enchanted forest. Keep the result coherent and high quality."
+    },
+    {
+      "id": "magical-castle",
+      "name": "Magical Castle",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a magical castle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as magical castle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "post-apocalyptic",
+      "name": "Post Apocalyptic",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a post apocalyptic transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as post apocalyptic. Keep the result coherent and high quality."
+    },
+    {
+      "id": "dystopian-city",
+      "name": "Dystopian City",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a dystopian city transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as dystopian city. Keep the result coherent and high quality."
+    },
+    {
+      "id": "noir-world",
+      "name": "Noir World",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a noir world transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as noir world. Keep the result coherent and high quality."
+    },
+    {
+      "id": "superhero-comic",
+      "name": "Superhero Comic",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a superhero comic transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as superhero comic. Keep the result coherent and high quality."
+    },
+    {
+      "id": "interstellar-travel",
+      "name": "Interstellar Travel",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a interstellar travel transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as interstellar travel. Keep the result coherent and high quality."
+    },
+    {
+      "id": "time-travel",
+      "name": "Time Travel",
+      "category": "Fantasy, Sci-Fi & Surreal",
+      "icon": "sparkles",
+      "instruction": "Apply a time travel transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as time travel. Keep the result coherent and high quality."
+    },
+    {
+      "id": "forest",
+      "name": "Forest",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a forest transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as forest. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rainforest",
+      "name": "Rainforest",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a rainforest transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rainforest. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bamboo-forest",
+      "name": "Bamboo Forest",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a bamboo forest transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bamboo forest. Keep the result coherent and high quality."
+    },
+    {
+      "id": "desert",
+      "name": "Desert",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a desert transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as desert. Keep the result coherent and high quality."
+    },
+    {
+      "id": "snowy-mountains",
+      "name": "Snowy Mountains",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a snowy mountains transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as snowy mountains. Keep the result coherent and high quality."
+    },
+    {
+      "id": "alpine-lake",
+      "name": "Alpine Lake",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a alpine lake transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as alpine lake. Keep the result coherent and high quality."
+    },
+    {
+      "id": "tropical-beach",
+      "name": "Tropical Beach",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a tropical beach transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as tropical beach. Keep the result coherent and high quality."
+    },
+    {
+      "id": "rocky-coast",
+      "name": "Rocky Coast",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a rocky coast transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as rocky coast. Keep the result coherent and high quality."
+    },
+    {
+      "id": "waterfall",
+      "name": "Waterfall",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a waterfall transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as waterfall. Keep the result coherent and high quality."
+    },
+    {
+      "id": "underwater-reef",
+      "name": "Underwater Reef",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a underwater reef transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as underwater reef. Keep the result coherent and high quality."
+    },
+    {
+      "id": "deep-ocean",
+      "name": "Deep Ocean",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a deep ocean transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as deep ocean. Keep the result coherent and high quality."
+    },
+    {
+      "id": "coral-garden",
+      "name": "Coral Garden",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a coral garden transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as coral garden. Keep the result coherent and high quality."
+    },
+    {
+      "id": "volcanic-landscape",
+      "name": "Volcanic Landscape",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a volcanic landscape transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as volcanic landscape. Keep the result coherent and high quality."
+    },
+    {
+      "id": "canyon",
+      "name": "Canyon",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a canyon transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as canyon. Keep the result coherent and high quality."
+    },
+    {
+      "id": "meadow",
+      "name": "Meadow",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a meadow transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as meadow. Keep the result coherent and high quality."
+    },
+    {
+      "id": "cherry-blossom-garden",
+      "name": "Cherry Blossom Garden",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a cherry blossom garden transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as cherry blossom garden. Keep the result coherent and high quality."
+    },
+    {
+      "id": "autumn-park",
+      "name": "Autumn Park",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a autumn park transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as autumn park. Keep the result coherent and high quality."
+    },
+    {
+      "id": "lavender-field",
+      "name": "Lavender Field",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a lavender field transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as lavender field. Keep the result coherent and high quality."
+    },
+    {
+      "id": "flower-garden",
+      "name": "Flower Garden",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a flower garden transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as flower garden. Keep the result coherent and high quality."
+    },
+    {
+      "id": "countryside",
+      "name": "Countryside",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a countryside transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as countryside. Keep the result coherent and high quality."
+    },
+    {
+      "id": "mountain-village",
+      "name": "Mountain Village",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a mountain village transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as mountain village. Keep the result coherent and high quality."
+    },
+    {
+      "id": "futuristic-architecture",
+      "name": "Futuristic Architecture",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a futuristic architecture transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as futuristic architecture. Keep the result coherent and high quality."
+    },
+    {
+      "id": "ancient-ruins",
+      "name": "Ancient Ruins",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a ancient ruins transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as ancient ruins. Keep the result coherent and high quality."
+    },
+    {
+      "id": "medieval-castle",
+      "name": "Medieval Castle",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a medieval castle transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as medieval castle. Keep the result coherent and high quality."
+    },
+    {
+      "id": "city-skyline",
+      "name": "City Skyline",
+      "category": "Nature, Places & Environment",
+      "icon": "trees",
+      "instruction": "Apply a city skyline transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as city skyline. Keep the result coherent and high quality."
+    },
+    {
+      "id": "glass",
+      "name": "Glass",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a glass transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as glass. Keep the result coherent and high quality."
+    },
+    {
+      "id": "frosted-glass",
+      "name": "Frosted Glass",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a frosted glass transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as frosted glass. Keep the result coherent and high quality."
+    },
+    {
+      "id": "chrome",
+      "name": "Chrome",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a chrome transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as chrome. Keep the result coherent and high quality."
+    },
+    {
+      "id": "brushed-metal",
+      "name": "Brushed Metal",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a brushed metal transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as brushed metal. Keep the result coherent and high quality."
+    },
+    {
+      "id": "gold-foil",
+      "name": "Gold Foil",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a gold foil transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as gold foil. Keep the result coherent and high quality."
+    },
+    {
+      "id": "silver-finish",
+      "name": "Silver Finish",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a silver finish transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as silver finish. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bronze",
+      "name": "Bronze",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a bronze transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bronze. Keep the result coherent and high quality."
+    },
+    {
+      "id": "copper",
+      "name": "Copper",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a copper transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as copper. Keep the result coherent and high quality."
+    },
+    {
+      "id": "marble",
+      "name": "Marble",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a marble transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as marble. Keep the result coherent and high quality."
+    },
+    {
+      "id": "granite",
+      "name": "Granite",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a granite transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as granite. Keep the result coherent and high quality."
+    },
+    {
+      "id": "crystal",
+      "name": "Crystal",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a crystal transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as crystal. Keep the result coherent and high quality."
+    },
+    {
+      "id": "diamond",
+      "name": "Diamond",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a diamond transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as diamond. Keep the result coherent and high quality."
+    },
+    {
+      "id": "ceramic",
+      "name": "Ceramic",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a ceramic transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as ceramic. Keep the result coherent and high quality."
+    },
+    {
+      "id": "porcelain",
+      "name": "Porcelain",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a porcelain transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as porcelain. Keep the result coherent and high quality."
+    },
+    {
+      "id": "wood-grain",
+      "name": "Wood Grain",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a wood grain transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as wood grain. Keep the result coherent and high quality."
+    },
+    {
+      "id": "carved-wood",
+      "name": "Carved Wood",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a carved wood transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as carved wood. Keep the result coherent and high quality."
+    },
+    {
+      "id": "leather-texture",
+      "name": "Leather Texture",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a leather texture transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as leather texture. Keep the result coherent and high quality."
+    },
+    {
+      "id": "velvet-texture",
+      "name": "Velvet Texture",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a velvet texture transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as velvet texture. Keep the result coherent and high quality."
+    },
+    {
+      "id": "silk-texture",
+      "name": "Silk Texture",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a silk texture transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as silk texture. Keep the result coherent and high quality."
+    },
+    {
+      "id": "paper-texture",
+      "name": "Paper Texture",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a paper texture transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as paper texture. Keep the result coherent and high quality."
+    },
+    {
+      "id": "origami",
+      "name": "Origami",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a origami transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as origami. Keep the result coherent and high quality."
+    },
+    {
+      "id": "miniature-diorama",
+      "name": "Miniature Diorama",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a miniature diorama transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as miniature diorama. Keep the result coherent and high quality."
+    },
+    {
+      "id": "tilt-shift-miniature",
+      "name": "Tilt Shift Miniature",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a tilt shift miniature transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as tilt shift miniature. Keep the result coherent and high quality."
+    },
+    {
+      "id": "clay-model",
+      "name": "Clay Model",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a clay model transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as clay model. Keep the result coherent and high quality."
+    },
+    {
+      "id": "action-figure",
+      "name": "Action Figure",
+      "category": "Materials, Objects & Miniatures",
+      "icon": "gem",
+      "instruction": "Apply a action figure transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as action figure. Keep the result coherent and high quality."
+    },
+    {
+      "id": "glitch-effect",
+      "name": "Glitch Effect",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a glitch effect transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as glitch effect. Keep the result coherent and high quality."
+    },
+    {
+      "id": "chromatic-aberration",
+      "name": "Chromatic Aberration",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a chromatic aberration transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as chromatic aberration. Keep the result coherent and high quality."
+    },
+    {
+      "id": "holographic-effect",
+      "name": "Holographic Effect",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a holographic effect transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as holographic effect. Keep the result coherent and high quality."
+    },
+    {
+      "id": "glitch-art",
+      "name": "Glitch Art",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a glitch art transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as glitch art. Keep the result coherent and high quality."
+    },
+    {
+      "id": "double-exposure-portrait",
+      "name": "Double Exposure Portrait",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a double exposure portrait transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as double exposure portrait. Keep the result coherent and high quality."
+    },
+    {
+      "id": "mirror-reflection",
+      "name": "Mirror Reflection",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a mirror reflection transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as mirror reflection. Keep the result coherent and high quality."
+    },
+    {
+      "id": "water-reflection",
+      "name": "Water Reflection",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a water reflection transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as water reflection. Keep the result coherent and high quality."
+    },
+    {
+      "id": "prism-refraction",
+      "name": "Prism Refraction",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a prism refraction transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as prism refraction. Keep the result coherent and high quality."
+    },
+    {
+      "id": "lens-flare",
+      "name": "Lens Flare",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a lens flare transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as lens flare. Keep the result coherent and high quality."
+    },
+    {
+      "id": "light-leak",
+      "name": "Light Leak",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a light leak transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as light leak. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bokeh",
+      "name": "Bokeh",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a bokeh transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bokeh. Keep the result coherent and high quality."
+    },
+    {
+      "id": "shallow-depth-of-field",
+      "name": "Shallow Depth Of Field",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a shallow depth of field transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as shallow depth of field. Keep the result coherent and high quality."
+    },
+    {
+      "id": "tilt-shift",
+      "name": "Tilt Shift",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a tilt shift transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as tilt shift. Keep the result coherent and high quality."
+    },
+    {
+      "id": "vignette",
+      "name": "Vignette",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a vignette transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as vignette. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bloom-glow",
+      "name": "Bloom Glow",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a bloom glow transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bloom glow. Keep the result coherent and high quality."
+    },
+    {
+      "id": "neon-glow",
+      "name": "Neon Glow",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a neon glow transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as neon glow. Keep the result coherent and high quality."
+    },
+    {
+      "id": "bioluminescence",
+      "name": "Bioluminescence",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a bioluminescence transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as bioluminescence. Keep the result coherent and high quality."
+    },
+    {
+      "id": "fire-embers",
+      "name": "Fire Embers",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a fire embers transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as fire embers. Keep the result coherent and high quality."
+    },
+    {
+      "id": "smoke-effect",
+      "name": "Smoke Effect",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a smoke effect transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as smoke effect. Keep the result coherent and high quality."
+    },
+    {
+      "id": "electric-energy",
+      "name": "Electric Energy",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a electric energy transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as electric energy. Keep the result coherent and high quality."
+    },
+    {
+      "id": "lightning-effect",
+      "name": "Lightning Effect",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a lightning effect transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as lightning effect. Keep the result coherent and high quality."
+    },
+    {
+      "id": "particle-effect",
+      "name": "Particle Effect",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a particle effect transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as particle effect. Keep the result coherent and high quality."
+    },
+    {
+      "id": "silhouette",
+      "name": "Silhouette",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a silhouette transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as silhouette. Keep the result coherent and high quality."
+    },
+    {
+      "id": "magazine-cover",
+      "name": "Magazine Cover",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a magazine cover transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as magazine cover. Keep the result coherent and high quality."
+    },
+    {
+      "id": "poster-design",
+      "name": "Poster Design",
+      "category": "Special Effects & Design",
+      "icon": "wand-sparkles",
+      "instruction": "Apply a poster design transformation to the user's input photograph. Use the supplied photo as the source image, preserve the main subject and important identity details unless the user explicitly requests otherwise, and make the visual treatment clearly recognizable as poster design. Keep the result coherent and high quality."
+    }
+  ]
+}
