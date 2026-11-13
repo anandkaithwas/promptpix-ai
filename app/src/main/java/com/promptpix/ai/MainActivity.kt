@@ -35,29 +35,41 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import android.net.Uri
 
-data class Effect(val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String, val command: String, val instruction: String)
-private val effects = listOf(
- Effect("Cinematic Portrait","Photography",Icons.Rounded.Movie,listOf(Color(0xFF123C4A),Color(0xFFE58B55)),"FILM LOOK","/cinematic","Film-inspired composition, controlled contrast and natural skin tones."),
- Effect("Golden Hour","Lighting",Icons.Rounded.WbSunny,listOf(Color(0xFFB95E35),Color(0xFFFFD27A)),"WARM GLOW","/goldenhour","Warm low-angle golden-hour sunlight."),
- Effect("Soft Bokeh","Lens",Icons.Rounded.BlurOn,listOf(Color(0xFF6D4A9B),Color(0xFFF4B5C8)),"SOFT FOCUS","/bokeh","Shallow depth of field with optical background blur."),
- Effect("Rembrandt Light","Lighting",Icons.Rounded.LightMode,listOf(Color(0xFF3C3152),Color(0xFFE7A36B)),"PORTRAIT LIGHT","/rembrandt","Directional portrait lighting with a triangular cheek highlight."),
- Effect("Rim Light","Lighting",Icons.Rounded.WbIncandescent,listOf(Color(0xFF182D48),Color(0xFF65C9D0)),"EDGE GLOW","/rimlight","Subtle edge lighting separating subject and background."),
- Effect("35mm Film","Photography",Icons.Rounded.PhotoCamera,listOf(Color(0xFF76543D),Color(0xFFE0B887)),"ANALOG FILM","/35mmfilm","Natural film grain and gentle highlight roll-off."),
- Effect("Monochrome","Colour",Icons.Rounded.Contrast,listOf(Color(0xFF252936),Color(0xFF9EA5B3)),"BLACK & WHITE","/monochrome","Expressive black and white with rich tonal separation."),
- Effect("Teal & Orange","Colour",Icons.Rounded.Palette,listOf(Color(0xFF075A69),Color(0xFFE58B55)),"DUAL TONE","/tealorange","Balanced teal shadows and warm highlights."),
- Effect("Editorial","Photography",Icons.Rounded.Article,listOf(Color(0xFF8D345F),Color(0xFFF0A6B9)),"MAGAZINE","/editorial","Polished fashion-editorial composition."),
- Effect("Soft Light","Lighting",Icons.Rounded.WbSunny,listOf(Color(0xFF9A8B78),Color(0xFFFFE6C6)),"DIFFUSED","/softlight","Broad diffused light and gentle shadows."),
- Effect("Macro Detail","Camera",Icons.Rounded.CenterFocusStrong,listOf(Color(0xFF174C40),Color(0xFF8FC9A8)),"MACRO","/macro","Fine close-up detail and macro depth of field."),
- Effect("Long Exposure","Camera",Icons.Rounded.Timelapse,listOf(Color(0xFF132B59),Color(0xFFEE8C76)),"MOTION TRAILS","/longexposure","Intentional motion trails in moving elements."),
- Effect("Atmospheric Mist","Atmosphere",Icons.Rounded.Cloud,listOf(Color(0xFF53677C),Color(0xFFC5D2D8)),"MISTY MOOD","/mist","Subtle atmospheric mist and light scattering."),
- Effect("Rainy Mood","Atmosphere",Icons.Rounded.WaterDrop,listOf(Color(0xFF233B59),Color(0xFF7F9CB8)),"RAIN EFFECT","/rain","Rain atmosphere with wet-surface reflections."),
- Effect("Cyberpunk","Art",Icons.Rounded.Bolt,listOf(Color(0xFF32106A),Color(0xFF00C9D8)),"NEON WORLD","/cyberpunk","Futuristic neon palette with magenta and cyan lighting."),
- Effect("Watercolour","Art",Icons.Rounded.Brush,listOf(Color(0xFF4C9CBA),Color(0xFFE7A6B5)),"PAINTED","/watercolor","Traditional watercolour pigment texture."),
- Effect("Anime","Art",Icons.Rounded.AutoAwesome,listOf(Color(0xFF293A85),Color(0xFFCB8BDA)),"ANIME STYLE","/anime","Polished hand-drawn anime illustration."),
- Effect("Surreal Dreamscape","Art",Icons.Rounded.CloudQueue,listOf(Color(0xFF46366F),Color(0xFFDC91C7)),"DREAM WORLD","/surrealism","Coherent surrealist dreamlike interpretation."),
- Effect("Product Hero","Commercial",Icons.Rounded.Inventory2,listOf(Color(0xFF27364A),Color(0xFFB8A1D8)),"STUDIO PRODUCT","/producthero","Premium commercial product photography."),
- Effect("Vintage Photo","Photography",Icons.Rounded.PhotoAlbum,listOf(Color(0xFF76543D),Color(0xFFD8B88C)),"RETRO PRINT","/vintage","Faded tones and subtle analogue grain.")
-)
+data class Effect(val id: String, val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String, val command: String, val instruction: String)
+private fun iconForCategory(category: String): androidx.compose.ui.graphics.vector.ImageVector = when {
+ category.contains("Photography") -> Icons.Rounded.PhotoCamera
+ category.contains("Camera") -> Icons.Rounded.CameraAlt
+ category.contains("Lighting") -> Icons.Rounded.WbSunny
+ category.contains("Weather") -> Icons.Rounded.Cloud
+ category.contains("Colour") -> Icons.Rounded.Palette
+ category.contains("Motion") -> Icons.Rounded.Timelapse
+ category.contains("Art") -> Icons.Rounded.Brush
+ category.contains("Fantasy") -> Icons.Rounded.AutoAwesome
+ category.contains("Nature") -> Icons.Rounded.Forest
+ category.contains("Materials") -> Icons.Rounded.Diamond
+ else -> Icons.Rounded.WandStars
+}
+private fun colorsForCategory(category: String): List<Color> = when {
+ category.contains("Photography") -> listOf(Color(0xFF214C63),Color(0xFFDA956A))
+ category.contains("Camera") -> listOf(Color(0xFF284D77),Color(0xFF7BB7D9))
+ category.contains("Lighting") -> listOf(Color(0xFF75472E),Color(0xFFFFD27A))
+ category.contains("Weather") -> listOf(Color(0xFF304B70),Color(0xFF9DB8D1))
+ category.contains("Colour") -> listOf(Color(0xFF5B347A),Color(0xFFE58B9A))
+ category.contains("Motion") -> listOf(Color(0xFF25466B),Color(0xFFDB795F))
+ category.contains("Art") -> listOf(Color(0xFF68418C),Color(0xFFE29CBF))
+ category.contains("Fantasy") -> listOf(Color(0xFF242B64),Color(0xFFB45CE0))
+ category.contains("Nature") -> listOf(Color(0xFF245A4A),Color(0xFF91B97A))
+ category.contains("Materials") -> listOf(Color(0xFF51566A),Color(0xFFBDA5D8))
+ else -> listOf(Color(0xFF493A70),Color(0xFFB77BEE))
+}
+private fun loadEffects(context: android.content.Context): List<Effect> {
+ val root = org.json.JSONObject(context.assets.open("catalogue/styles.json").bufferedReader().use { it.readText() })
+ val array = root.getJSONArray("styles")
+ return (0 until array.length()).map { i ->
+  val item = array.getJSONObject(i); val category = item.getString("category")
+  Effect(item.getString("id"),item.getString("name"),category,iconForCategory(category),colorsForCategory(category),category.uppercase(),"/"+item.getString("id"),item.getString("instruction"))
+ }
+}
 private val ink = Color(0xFF171323)
 
 data class EditPlan(
@@ -111,13 +123,16 @@ fun AuraStudioApp() {
  var editPlan by remember { mutableStateOf<EditPlan?>(null) }
  var showReview by remember { mutableStateOf(false) }
  var selectedCategory by remember { mutableStateOf("All") }
- var selectedEffect by remember { mutableStateOf(effects.first()) }
+ var selectedEffectTitles = remember { mutableStateListOf<String>() }
+ var catalogueSearch by remember { mutableStateOf("") }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
  val gallery = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { photoUri = it; cameraBitmap = null }
  val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { cameraBitmap = it; photoUri = null }
+ val effects = remember { loadEffects(context) }
  val categories = listOf("All") + effects.map { it.category }.distinct()
- val shown = effects.filter { selectedCategory == "All" || it.category == selectedCategory }
+ val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && (catalogueSearch.isBlank() || it.title.contains(catalogueSearch,true) || it.category.contains(catalogueSearch,true)) }
+ val selectedEffect = effects.firstOrNull { it.title in selectedEffectTitles } ?: effects.first()
  MaterialTheme(colorScheme = darkColorScheme(
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
@@ -136,7 +151,7 @@ fun AuraStudioApp() {
     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.Collections,null)},label={Text("My edits")})
    }
   }) { padding ->
-   Column(Modifier.fillMaxSize().padding(padding).padding(horizontal=18.dp)) {
+   Column(Modifier.fillMaxSize().padding(padding).padding(horizontal=18.dp).verticalScroll(rememberScrollState())) {
     Row(Modifier.fillMaxWidth().padding(top=14.dp,bottom=18.dp), verticalAlignment=Alignment.CenterVertically) {
      Box(Modifier.size(44.dp).clip(RoundedCornerShape(15.dp)).background(Brush.linearGradient(listOf(Color(0xFF9D73FF),Color(0xFFFF9D83)))), contentAlignment=Alignment.Center) {
       Icon(Icons.Rounded.Camera, null, tint=Color.White, modifier=Modifier.size(27.dp))
@@ -148,7 +163,7 @@ fun AuraStudioApp() {
     }
     Text("Make every photo",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color.White)
     Text("extraordinary.",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC5A5FF))
-    Text("Browse the effect catalogue or describe what you imagine.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
+    Text("Choose from 275+ transformations or describe your own edit.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
     Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))) {
      if (photoUri != null) AsyncImage(model=photoUri,contentDescription="Your selected photo",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else if (cameraBitmap != null) androidx.compose.foundation.Image(cameraBitmap!!.asImageBitmap(),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
@@ -177,31 +192,37 @@ fun AuraStudioApp() {
      shape=RoundedCornerShape(16.dp)
     )
     Button(
-     onClick={ editPlan = interpretRequestLocally(editDescription); showReview = true; generatedImageUri=null },
-     enabled=(photoUri!=null || cameraBitmap!=null) && editDescription.isNotBlank(),
+     onClick={ val chosen = effects.filter { it.title in selectedEffectTitles }; val combined = (chosen.map { it.title + ": " + it.instruction } + listOf(editDescription.trim()).filter { it.isNotBlank() }).joinToString("\n\n"); editPlan = interpretRequestLocally(combined); showReview = true; generatedImageUri=null },
+     enabled=(photoUri!=null || cameraBitmap!=null) && (editDescription.isNotBlank() || selectedEffectTitles.isNotEmpty()),
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
-    ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Create my edit") }
-    Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
+    ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Review my edit") }
+    Text(if(selectedEffectTitles.isEmpty()) editStatus else "${selectedEffectTitles.size} style(s) selected. Add your own instructions if needed.",fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
      Spacer(Modifier.weight(1f)); Text("${effects.size} styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
     }
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top=10.dp,bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-     categories.forEach { c -> FilterChip(selected=selectedCategory==c,onClick={selectedCategory=c},label={Text(c)},shape=RoundedCornerShape(20.dp)) }
+    OutlinedTextField(value=catalogueSearch,onValueChange={catalogueSearch=it},modifier=Modifier.fillMaxWidth().padding(top=10.dp,bottom=8.dp),placeholder={Text("Search 275+ styles...")},leadingIcon={Icon(Icons.Rounded.Search,null)},singleLine=true,shape=RoundedCornerShape(14.dp))
+    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) { categories.forEach { c -> FilterChip(selected=selectedCategory==c,onClick={selectedCategory=c},label={Text(c)},shape=RoundedCornerShape(20.dp)) } }
+    if(selectedEffectTitles.isNotEmpty()) {
+     Text("SELECTED STYLES (${selectedEffectTitles.size})",fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp,modifier=Modifier.padding(bottom=6.dp))
+     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(6.dp)) { selectedEffectTitles.forEach { title -> AssistChip(onClick={selectedEffectTitles.remove(title)},label={Text(title)},leadingIcon={Icon(Icons.Rounded.CheckCircle,null)},trailingIcon={Icon(Icons.Rounded.Close,null)}) } }
     }
-    LazyVerticalGrid(columns=GridCells.Fixed(2),modifier=Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(12.dp),horizontalArrangement=Arrangement.spacedBy(12.dp),contentPadding=PaddingValues(bottom=14.dp)) {
-     items(shown) { effect ->
-      val active = selectedEffect.title == effect.title
-      Column(Modifier.clip(RoundedCornerShape(18.dp)).background(if(active) Color(0xFF3A2D52) else Color(0xFF272132)).clickable { selectedEffect=effect }.padding(8.dp)) {
-       Box(Modifier.fillMaxWidth().height(104.dp).clip(RoundedCornerShape(13.dp)).background(Brush.linearGradient(effect.colors))) {
-        Icon(effect.icon,null,tint=Color.White.copy(alpha=.9f),modifier=Modifier.align(Alignment.Center).size(39.dp))
-        Text(effect.sample,Modifier.align(Alignment.BottomStart).padding(8.dp),color=Color.White,fontSize=8.sp,fontWeight=FontWeight.Bold,letterSpacing=1.sp)
-        if(active) Icon(Icons.Rounded.CheckCircle, null,tint=Color.White,modifier=Modifier.align(Alignment.TopEnd).padding(7.dp))
+    Text("Tap any style to add it to your edit. Select more than one.",fontSize=11.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(bottom=9.dp))
+    shown.chunked(2).forEach { rowEffects ->
+     Row(Modifier.fillMaxWidth().padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+      rowEffects.forEach { effect ->
+       val active = effect.title in selectedEffectTitles
+       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) selectedEffectTitles.remove(effect.title) else selectedEffectTitles.add(effect.title) }.padding(10.dp)) {
+        Box(Modifier.fillMaxWidth().height(78.dp).clip(RoundedCornerShape(12.dp)).background(Brush.linearGradient(effect.colors))) {
+         Icon(effect.icon,null,tint=Color.White,modifier=Modifier.align(Alignment.Center).size(34.dp))
+         if(active) Icon(Icons.Rounded.CheckCircle,null,tint=Color.White,modifier=Modifier.align(Alignment.TopEnd).padding(5.dp))
+        }
+        Text(effect.title,Modifier.padding(top=7.dp),fontWeight=FontWeight.SemiBold,fontSize=12.sp,maxLines=2)
+        Text(effect.category,Modifier.padding(top=2.dp),fontSize=10.sp,color=Color(0xFFB9A9D1),maxLines=1)
        }
-       Text(effect.title,Modifier.padding(top=8.dp,start=3.dp),fontWeight=FontWeight.SemiBold,fontSize=14.sp)
-       Text(effect.category,Modifier.padding(start=3.dp,top=2.dp),fontSize=11.sp,color=Color(0xFFB9A9D1))
       }
+      if(rowEffects.size==1) Spacer(Modifier.weight(1f))
      }
     }
     Row(Modifier.fillMaxWidth().padding(bottom=8.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
