@@ -95,7 +95,11 @@ fun AuraStudioApp() {
  val context = LocalContext.current
  var editDescription by remember { mutableStateOf("") }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
- var generatedImageUri by remember { mutableStateOf<Uri?>(null) }\n var editPlan by remember { mutableStateOf<EditPlan?>(null) }\n var showReview by remember { mutableStateOf(false) }
+ var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
+ var editPlan by remember { mutableStateOf<EditPlan?>(null) }
+ var showReview by remember { mutableStateOf(false) }
+ var editPlan by remember { mutableStateOf<EditPlan?>(null) }
+ var showReview by remember { mutableStateOf(false) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedEffect by remember { mutableStateOf(effects.first()) }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
@@ -108,7 +112,14 @@ fun AuraStudioApp() {
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
  )) {
-  if (showReview && editPlan != null) {\n   EditPlanReviewScreen(\n    plan = editPlan!!,\n    onConfirm = { showReview = false; editStatus = "Plan confirmed. Image generation engine integration is the next milestone." },\n    onEdit = { showReview = false },\n    onCancel = { showReview = false; editPlan = null; editStatus = "Edit cancelled. No image was generated." }\n   )\n  } else Scaffold(containerColor = ink, bottomBar = {
+  if (showReview && editPlan != null) {
+   EditPlanReviewScreen(
+    plan = editPlan!!,
+    onConfirm = { showReview = false; editStatus = "Plan confirmed. Image generation engine integration is the next milestone." },
+    onEdit = { showReview = false },
+    onCancel = { showReview = false; editPlan = null; editStatus = "Edit cancelled. No image was generated." }
+   )
+  } else Scaffold(containerColor = ink, bottomBar = {
    NavigationBar(containerColor = Color(0xFF211B2D)) {
     NavigationBarItem(selected=true,onClick={},icon={Icon(Icons.Rounded.AutoAwesome,null)},label={Text("Discover")})
     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.FavoriteBorder,null)},label={Text("Saved")})
@@ -160,7 +171,7 @@ fun AuraStudioApp() {
      enabled=(photoUri!=null || cameraBitmap!=null) && editDescription.isNotBlank(),
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
-    ) { Icon(Icons.Rounded.WandSparkles,null); Spacer(Modifier.width(8.dp)); Text("Create my edit") }
+    ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Create my edit") }
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
