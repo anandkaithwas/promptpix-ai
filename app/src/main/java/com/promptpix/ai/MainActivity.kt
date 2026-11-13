@@ -49,6 +49,32 @@ private fun iconForCategory(category: String): androidx.compose.ui.graphics.vect
  category.contains("Materials") -> Icons.Rounded.Diamond
  else -> Icons.Rounded.AutoAwesome
 }
+private fun iconForStyle(name: String, category: String): androidx.compose.ui.graphics.vector.ImageVector {
+ val n = name.lowercase()
+ return when {
+  listOf("cinematic","film","movie","noir").any { it in n } -> Icons.Rounded.Movie
+  listOf("portrait","headshot","face","beauty").any { it in n } -> Icons.Rounded.Face
+  listOf("close up","macro","detail","zoom").any { it in n } -> Icons.Rounded.ZoomIn
+  listOf("wide","panoramic","fisheye").any { it in n } -> Icons.Rounded.Panorama
+  listOf("bird","aerial","drone","top down").any { it in n } -> Icons.Rounded.Flight
+  listOf("sun","golden hour","sunrise","sunset","daylight").any { it in n } -> Icons.Rounded.WbSunny
+  listOf("rain","water","ocean","underwater","waterfall").any { it in n } -> Icons.Rounded.WaterDrop
+  listOf("snow","ice","blizzard").any { it in n } -> Icons.Rounded.AcUnit
+  listOf("forest","tree","nature","meadow","garden").any { it in n } -> Icons.Rounded.Forest
+  listOf("space","galaxy","cosmic","star","interstellar").any { it in n } -> Icons.Rounded.Public
+  listOf("fire","ember","flame").any { it in n } -> Icons.Rounded.LocalFireDepartment
+  listOf("light","lighting","glow","neon","flare").any { it in n } -> Icons.Rounded.LightMode
+  listOf("motion","exposure","blur","trail","action").any { it in n } -> Icons.Rounded.Timelapse
+  listOf("double exposure","multiple exposure","layers").any { it in n } -> Icons.Rounded.Layers
+  listOf("glass","crystal","diamond","gem").any { it in n } -> Icons.Rounded.Diamond
+  listOf("castle","medieval","architecture","building").any { it in n } -> Icons.Rounded.Castle
+  listOf("anime","illustration","painting","watercolour","sketch","art").any { it in n } -> Icons.Rounded.Brush
+  listOf("colour","color","monochrome","sepia","palette").any { it in n } -> Icons.Rounded.Palette
+  listOf("cyberpunk","futuristic","electric","lightning","glitch").any { it in n } -> Icons.Rounded.Bolt
+  else -> iconForCategory(category)
+ }
+}
+
 private fun colorsForCategory(category: String): List<Color> = when {
  category.contains("Photography") -> listOf(Color(0xFF214C63),Color(0xFFDA956A))
  category.contains("Camera") -> listOf(Color(0xFF284D77),Color(0xFF7BB7D9))
@@ -67,7 +93,7 @@ private fun loadEffects(context: android.content.Context): List<Effect> {
  val array = root.getJSONArray("styles")
  return (0 until array.length()).map { i ->
   val item = array.getJSONObject(i); val category = item.getString("category")
-  Effect(item.getString("id"),item.getString("name"),category,iconForCategory(category),colorsForCategory(category),category.uppercase(),"/"+item.getString("id"),item.getString("instruction"))
+  Effect(item.getString("id"),item.getString("name"),category,iconForStyle(item.getString("name"),category),colorsForCategory(category),category.uppercase(),"/"+item.getString("id"),item.getString("instruction"))
  }
 }
 private val ink = Color(0xFF171323)
