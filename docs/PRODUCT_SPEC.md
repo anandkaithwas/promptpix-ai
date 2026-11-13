@@ -34,3 +34,12 @@ Aura Studio is a free Android AI image-to-image editor. Users select a photo, ch
 - Photo input, 275-style catalogue, search, filters, multi-selection, custom description and direct Generate UI: implemented.
 - Actual image-to-image inference engine: NOT integrated.
 - Real generation progress, output save and share: NOT complete.
+
+## Balanced low-end inference profile
+- Device baseline: Android 8.0/API 26, 3 GB RAM class, 64 GB storage class.
+- Balanced means start with 256x256 image-to-image, measure memory and latency, then test 384x384; 512x512 is conditional on measured headroom.
+- Use bounded image decoding and RGB_565 preprocessing to limit peak bitmap memory.
+- The app includes device diagnostics (API level, total/available RAM, ABI, CPU cores and Android low-RAM classification) plus a photo preprocessing benchmark.
+- The preprocessing test is not an AI generation benchmark. The real diffusion model/runtime remains unintegrated and must not be represented as complete.
+- Do not enable inference on a 3 GB phone solely because it meets the marketing RAM minimum; require a measured safe available-memory threshold and recover gracefully from out-of-memory errors.
+- Benchmark the CPU/GPU MNN route first on MediaTek/Mali hardware; Snapdragon QNN/NPU acceleration is device-specific and cannot be assumed.

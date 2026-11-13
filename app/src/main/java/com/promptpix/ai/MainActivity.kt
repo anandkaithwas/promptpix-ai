@@ -1,6 +1,8 @@
 package com.promptpix.ai
 
 import android.graphics.Bitmap
+import android.app.ActivityManager
+import android.os.Build
 import android.content.Intent
 import androidx.compose.ui.platform.LocalContext
 import android.os.Bundle
@@ -219,6 +221,8 @@ fun AuraStudioApp() {
      shape=RoundedCornerShape(14.dp)
     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Generate") }
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
+    DeviceReadinessCard(context, photoUri, cameraBitmap)
+
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
      Spacer(Modifier.weight(1f)); Text("${effects.size} styles",fontSize=11.sp,color=Color(0xFFB9A9D1))

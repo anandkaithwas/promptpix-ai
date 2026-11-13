@@ -44,6 +44,7 @@ Android 8 / 3 GB RAM is the minimum compatibility target for the app shell, not 
 ## Current implementation status
 - Android minSdk 26 (Android 8.0) and targetSdk 36.
 - Gallery/camera input, catalogue, search, category filters, multi-selection and custom description are implemented.
+- Device diagnostics and bounded 512 px photo preprocessing test: implemented.
 - Actual image-to-image model and inference runtime are not yet integrated.
 - Real generation progress, output saving and output sharing remain to be implemented and tested.
 
