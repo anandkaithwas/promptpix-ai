@@ -98,8 +98,6 @@ fun AuraStudioApp() {
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
  var editPlan by remember { mutableStateOf<EditPlan?>(null) }
  var showReview by remember { mutableStateOf(false) }
- var editPlan by remember { mutableStateOf<EditPlan?>(null) }
- var showReview by remember { mutableStateOf(false) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedEffect by remember { mutableStateOf(effects.first()) }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
