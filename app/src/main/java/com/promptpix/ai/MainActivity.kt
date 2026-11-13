@@ -47,7 +47,44 @@ private val effects = listOf(
  Effect("Editorial", "Portrait", Icons.Rounded.Camera, listOf(Color(0xFF8D345F),Color(0xFFF0A6B9)), "MAGAZINE")
 )
 private val ink = Color(0xFF171323)
-private val violet = Color(0xFF9A70F5)
+
+data class EditPlan(
+ val mainChange: String,
+ val lighting: String,
+ val style: String,
+ val background: String,
+ val preserve: String,
+ val notes: String
+)
+
+private fun interpretRequestLocally(text: String): EditPlan {
+ val q = text.lowercase()
+ val lighting = when {
+  listOf("sunset","golden hour","warm light","sunrise").any { it in q } -> "Warm, golden natural lighting"
+  listOf("dark","moody","dramatic","night").any { it in q } -> "Dramatic, lower-key lighting"
+  listOf("bright"," 밝","daylight","studio light").any { it in q } -> "Brighter, balanced lighting"
+  else -> "Keep lighting natural unless the requested style requires a change"
+ }
+ val style = when {
+  "cinematic" in q || "movie" in q || "film" in q -> "Cinematic photographic treatment"
+  "vintage" in q || "retro" in q -> "Vintage film-inspired treatment"
+  "anime" in q || "cartoon" in q -> "Illustrative transformation"
+  "black and white" in q || "monochrome" in q -> "Black-and-white treatment"
+  "professional" in q || "dslr" in q -> "Professional photographic finish"
+  else -> "Follow the visual style described in your request"
+ }
+ val background = when {
+  "background" in q || "replace" in q || "switzerland" in q || "beach" in q || "forest" in q || "sunset" in q -> "Background or environment changes were requested; preserve the main subject where possible"
+  else -> "No specific background replacement detected"
+ }
+ val preserve = if (listOf("keep my face","face unchanged","don't change my face","do not change my face","preserve face","keep identity").any { it in q }) {
+  "Preserve facial identity and key facial features"
+ } else {
+  "No explicit identity-preservation instruction detected. Review the subject carefully."
+ }
+ val notes = if (q.length < 12) "The request is very short. Add more detail for a more predictable edit." else "This is a basic on-device keyword interpretation preview, not an AI model's final understanding."
+ return EditPlan(text.trim().replaceFirstChar { it.uppercase() }, lighting, style, background, preserve, notes)
+}
 
 class MainActivity : ComponentActivity() {
  override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState); setContent { AuraStudioApp() } }
@@ -58,7 +95,7 @@ fun AuraStudioApp() {
  val context = LocalContext.current
  var editDescription by remember { mutableStateOf("") }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
- var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
+ var generatedImageUri by remember { mutableStateOf<Uri?>(null) }\n var editPlan by remember { mutableStateOf<EditPlan?>(null) }\n var showReview by remember { mutableStateOf(false) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedEffect by remember { mutableStateOf(effects.first()) }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
@@ -71,7 +108,7 @@ fun AuraStudioApp() {
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
  )) {
-  Scaffold(containerColor = ink, bottomBar = {
+  if (showReview && editPlan != null) {\n   EditPlanReviewScreen(\n    plan = editPlan!!,\n    onConfirm = { showReview = false; editStatus = "Plan confirmed. Image generation engine integration is the next milestone." },\n    onEdit = { showReview = false },\n    onCancel = { showReview = false; editPlan = null; editStatus = "Edit cancelled. No image was generated." }\n   )\n  } else Scaffold(containerColor = ink, bottomBar = {
    NavigationBar(containerColor = Color(0xFF211B2D)) {
     NavigationBarItem(selected=true,onClick={},icon={Icon(Icons.Rounded.AutoAwesome,null)},label={Text("Discover")})
     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.FavoriteBorder,null)},label={Text("Saved")})
@@ -119,7 +156,7 @@ fun AuraStudioApp() {
      shape=RoundedCornerShape(16.dp)
     )
     Button(
-     onClick={editStatus="Your request is captured. The on-device language interpreter and image-generation engine are not integrated yet."; generatedImageUri=null},
+     onClick={ editPlan = interpretRequestLocally(editDescription); showReview = true; generatedImageUri=null },
      enabled=(photoUri!=null || cameraBitmap!=null) && editDescription.isNotBlank(),
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
@@ -165,6 +202,65 @@ fun AuraStudioApp() {
     }
 
    }
+  }
+ }
+}
+
+
+@Composable
+private fun EditPlanReviewScreen(
+ plan: EditPlan,
+ onConfirm: () -> Unit,
+ onEdit: () -> Unit,
+ onCancel: () -> Unit
+) {
+ MaterialTheme(colorScheme = darkColorScheme(primary=Color(0xFFC7A8FF),background=ink,surface=Color(0xFF241F32),onSurface=Color(0xFFF7F1FF))) {
+  Column(
+   Modifier.fillMaxSize().background(ink).padding(20.dp),
+   verticalArrangement=Arrangement.spacedBy(14.dp)
+  ) {
+   Row(verticalAlignment=Alignment.CenterVertically) {
+    Icon(Icons.Rounded.AutoAwesome,null,tint=Color(0xFFC7A8FF))
+    Spacer(Modifier.width(10.dp))
+    Text("AURA STUDIO",fontWeight=FontWeight.Bold,letterSpacing=1.2.sp)
+   }
+   Text("Review your edit",fontSize=28.sp,fontWeight=FontWeight.Bold)
+   Text("Here's what we understood. Check the plan before any image generation begins.",color=Color(0xFFB9B0C7))
+   PlanCard("Main change",plan.mainChange)
+   PlanCard("Lighting & mood",plan.lighting)
+   PlanCard("Visual treatment",plan.style)
+   PlanCard("Background & environment",plan.background)
+   PlanCard("Subject preservation",plan.preserve)
+   Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF392D24))) {
+    Row(Modifier.padding(13.dp),verticalAlignment=Alignment.Top) {
+     Icon(Icons.Rounded.Info,null,tint=Color(0xFFFFC27A))
+     Spacer(Modifier.width(9.dp))
+     Text(plan.notes,color=Color(0xFFFFDCA8),fontSize=12.sp)
+    }
+   }
+   Spacer(Modifier.weight(1f))
+   Button(onClick=onConfirm,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(14.dp)) {
+    Icon(Icons.Rounded.CheckCircle,null); Spacer(Modifier.width(8.dp)); Text("Confirm & generate")
+   }
+   OutlinedButton(onClick=onEdit,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(14.dp)) {
+    Icon(Icons.Rounded.Edit,null); Spacer(Modifier.width(8.dp)); Text("Edit request")
+   }
+   TextButton(onClick=onCancel,modifier=Modifier.fillMaxWidth()) { Text("Cancel",color=Color(0xFFB9B0C7)) }
+   Text("Prototype note: this preview uses simple local keyword rules. It is not yet a trained language model, and generation is not connected.",fontSize=10.sp,color=Color(0xFF93899F))
+  }
+ }
+}
+
+@Composable
+private fun PlanCard(title: String, body: String) {
+ Card(
+  modifier=Modifier.fillMaxWidth(),
+  colors=CardDefaults.cardColors(containerColor=Color(0xFF282236)),
+  shape=RoundedCornerShape(15.dp)
+ ) {
+  Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
+   Text(title.uppercase(),fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp)
+   Text(body,fontSize=14.sp,color=Color(0xFFF7F1FF))
   }
  }
 }
