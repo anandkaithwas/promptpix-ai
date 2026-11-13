@@ -1,0 +1,72 @@
+name: MNN Android inference engine
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/mnn-engine.yml"
+      - "docs/INFERENCE_ENGINE.md"
+
+jobs:
+  build-mnn-arm64:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout Aura Studio
+        uses: actions/checkout@v4
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK and CMake
+        run: |
+          sdkmanager --install "ndk;27.2.12479018" "cmake;3.22.1"
+          echo "ANDROID_NDK=$ANDROID_SDK_ROOT/ndk/27.2.12479018" >> "$GITHUB_ENV"
+
+      - name: Checkout MNN
+        uses: actions/checkout@v4
+        with:
+          repository: alibaba/MNN
+          ref: master
+          path: third_party/MNN
+          submodules: recursive
+
+      - name: Build MNN diffusion runtime for Android 8+ (arm64)
+        working-directory: third_party/MNN/project/android
+        run: |
+          mkdir -p build_64
+          cd build_64
+          bash ../build_64.sh \
+            -DMNN_LOW_MEMORY=ON \
+            -DMNN_BUILD_DIFFUSION=ON \
+            -DMNN_BUILD_LLM=ON \
+            -DMNN_BUILD_OPENCV=ON \
+            -DMNN_IMGCODECS=ON \
+            -DMNN_OPENCL=ON \
+            -DMNN_SEP_BUILD=OFF \
+            -DMNN_SUPPORT_TRANSFORMER_FUSE=ON \
+            -DMNN_BUILD_TEST=OFF \
+            -DMNN_BUILD_BENCHMARK=OFF
+
+      - name: Collect native libraries and build metadata
+        run: |
+          mkdir -p engine-artifact
+          find third_party/MNN/project/android/build_64 -type f -name "*.so" -exec cp {} engine-artifact/ \;
+          test -n "$(find engine-artifact -type f -name '*.so' -print -quit)"
+          {
+            echo "MNN source: alibaba/MNN master at build time"
+            echo "ABI: arm64-v8a"
+            echo "Android native API floor: 21 (Android 5.0); Aura Studio app floor remains API 26"
+            echo "Diffusion: enabled"
+            echo "Low-memory mode: enabled"
+            echo "OpenCL: enabled; runtime must fall back to CPU if unavailable"
+            echo "Model weights are not included in this artifact."
+          } > engine-artifact/BUILD-INFO.txt
+
+      - name: Upload MNN runtime artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-mnn-arm64-runtime
+          path: engine-artifact/*
+          if-no-files-found: error
+          retention-days: 14
