@@ -147,8 +147,6 @@ fun AuraStudioApp() {
  var editDescription by remember { mutableStateOf("") }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
- var editPlan by remember { mutableStateOf<EditPlan?>(null) }
- var showReview by remember { mutableStateOf(false) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedEffectTitles = remember { mutableStateListOf<String>() }
  var catalogueSearch by remember { mutableStateOf("") }
@@ -164,27 +162,11 @@ fun AuraStudioApp() {
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
  )) {
-  if (showReview && editPlan != null) {
-   EditPlanReviewScreen(
-    plan = editPlan!!,
-    onConfirm = { showReview = false; editStatus = "Plan confirmed. Image generation engine integration is the next milestone." },
-    onEdit = { showReview = false },
-    onCancel = { showReview = false; editPlan = null; editStatus = "Edit cancelled. No image was generated." }
-   )
-  } else Scaffold(containerColor = ink, bottomBar = {
-   Column {
-    if ((photoUri != null || cameraBitmap != null) && (selectedEffectTitles.isNotEmpty() || editDescription.isNotBlank())) {
-     Button(
-      onClick={ val chosen = effects.filter { it.title in selectedEffectTitles }; val combined = (chosen.map { it.title + ": " + it.instruction } + listOf(editDescription.trim()).filter { it.isNotBlank() }).joinToString("\n\n"); editPlan = interpretRequestLocally(combined); showReview = true; generatedImageUri=null },
-      modifier=Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=8.dp),
-      shape=RoundedCornerShape(14.dp)
-     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Review " + selectedEffectTitles.size + " selected style(s)") }
-    }
-    NavigationBar(containerColor = Color(0xFF211B2D)) {
-     NavigationBarItem(selected=true,onClick={},icon={Icon(Icons.Rounded.AutoAwesome,null)},label={Text("Discover")})
-     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.FavoriteBorder,null)},label={Text("Saved")})
-     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.Collections,null)},label={Text("My edits")})
-    }
+  Scaffold(containerColor = ink, bottomBar = {
+   NavigationBar(containerColor = Color(0xFF211B2D)) {
+    NavigationBarItem(selected=true,onClick={},icon={Icon(Icons.Rounded.AutoAwesome,null)},label={Text("Discover")})
+    NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.FavoriteBorder,null)},label={Text("Saved")})
+    NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.Collections,null)},label={Text("My edits")})
    }
   }) { padding ->
    Column(Modifier.fillMaxSize().padding(padding).padding(horizontal=18.dp).verticalScroll(rememberScrollState())) {
@@ -228,11 +210,14 @@ fun AuraStudioApp() {
      shape=RoundedCornerShape(16.dp)
     )
     Button(
-     onClick={ val chosen = effects.filter { it.title in selectedEffectTitles }; val combined = (chosen.map { it.title + ": " + it.instruction } + listOf(editDescription.trim()).filter { it.isNotBlank() }).joinToString("\n\n"); editPlan = interpretRequestLocally(combined); showReview = true; generatedImageUri=null },
+     onClick={
+      generatedImageUri = null
+      editStatus = "AI generation is not connected yet. The selected photo and edit instructions are ready, but an image model must be integrated before an edited image can be produced."
+     },
      enabled=(photoUri!=null || cameraBitmap!=null) && (editDescription.isNotBlank() || selectedEffectTitles.isNotEmpty()),
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
-    ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Review my edit") }
+    ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Generate") }
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
@@ -249,7 +234,7 @@ fun AuraStudioApp() {
      Row(Modifier.fillMaxWidth().padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
       rowEffects.forEach { effect ->
        val active = effect.title in selectedEffectTitles
-       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) { selectedEffectTitles.remove(effect.title); editStatus = effect.title + " removed from your edit." } else { selectedEffectTitles.add(effect.title); editStatus = effect.title + " added. " + selectedEffectTitles.size + " style(s) selected. Use Review to continue." } }.padding(10.dp)) {
+       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) { selectedEffectTitles.remove(effect.title); editStatus = effect.title + " removed from your edit." } else { selectedEffectTitles.add(effect.title); editStatus = effect.title + " added. " + selectedEffectTitles.size + " style(s) selected. Tap Generate to start your edit." } }.padding(10.dp)) {
         Box(Modifier.fillMaxWidth().height(78.dp).clip(RoundedCornerShape(12.dp)).background(Brush.linearGradient(effect.colors))) {
          Icon(effect.icon,null,tint=Color.White,modifier=Modifier.align(Alignment.Center).size(34.dp))
          if(active) Icon(Icons.Rounded.CheckCircle,null,tint=Color.White,modifier=Modifier.align(Alignment.TopEnd).padding(5.dp))
@@ -284,61 +269,3 @@ fun AuraStudioApp() {
  }
 }
 
-
-@Composable
-private fun EditPlanReviewScreen(
- plan: EditPlan,
- onConfirm: () -> Unit,
- onEdit: () -> Unit,
- onCancel: () -> Unit
-) {
- MaterialTheme(colorScheme = darkColorScheme(primary=Color(0xFFC7A8FF),background=ink,surface=Color(0xFF241F32),onSurface=Color(0xFFF7F1FF))) {
-  Column(
-   Modifier.fillMaxSize().background(ink).padding(20.dp),
-   verticalArrangement=Arrangement.spacedBy(14.dp)
-  ) {
-   Row(verticalAlignment=Alignment.CenterVertically) {
-    Icon(Icons.Rounded.AutoAwesome,null,tint=Color(0xFFC7A8FF))
-    Spacer(Modifier.width(10.dp))
-    Text("AURA STUDIO",fontWeight=FontWeight.Bold,letterSpacing=1.2.sp)
-   }
-   Text("Review your edit",fontSize=28.sp,fontWeight=FontWeight.Bold)
-   Text("Here's what we understood. Check the plan before any image generation begins.",color=Color(0xFFB9B0C7))
-   PlanCard("Main change",plan.mainChange)
-   PlanCard("Lighting & mood",plan.lighting)
-   PlanCard("Visual treatment",plan.style)
-   PlanCard("Background & environment",plan.background)
-   PlanCard("Subject preservation",plan.preserve)
-   Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF392D24))) {
-    Row(Modifier.padding(13.dp),verticalAlignment=Alignment.Top) {
-     Icon(Icons.Rounded.Info,null,tint=Color(0xFFFFC27A))
-     Spacer(Modifier.width(9.dp))
-     Text(plan.notes,color=Color(0xFFFFDCA8),fontSize=12.sp)
-    }
-   }
-   Spacer(Modifier.weight(1f))
-   Button(onClick=onConfirm,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(14.dp)) {
-    Icon(Icons.Rounded.CheckCircle,null); Spacer(Modifier.width(8.dp)); Text("Confirm & generate")
-   }
-   OutlinedButton(onClick=onEdit,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(14.dp)) {
-    Icon(Icons.Rounded.Edit,null); Spacer(Modifier.width(8.dp)); Text("Edit request")
-   }
-   TextButton(onClick=onCancel,modifier=Modifier.fillMaxWidth()) { Text("Cancel",color=Color(0xFFB9B0C7)) }
-   Text("Prototype note: this preview uses simple local keyword rules. It is not yet a trained language model, and generation is not connected.",fontSize=10.sp,color=Color(0xFF93899F))
-  }
- }
-}
-
-@Composable
-private fun PlanCard(title: String, body: String) {
- Card(
-  modifier=Modifier.fillMaxWidth(),
-  colors=CardDefaults.cardColors(containerColor=Color(0xFF282236)),
-  shape=RoundedCornerShape(15.dp)
- ) {
-  Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)) {
-   Text(title.uppercase(),fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp)
-   Text(body,fontSize=14.sp,color=Color(0xFFF7F1FF))
-  }
- }
-}
