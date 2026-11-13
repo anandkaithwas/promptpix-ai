@@ -47,7 +47,7 @@ private fun iconForCategory(category: String): androidx.compose.ui.graphics.vect
  category.contains("Fantasy") -> Icons.Rounded.AutoAwesome
  category.contains("Nature") -> Icons.Rounded.Forest
  category.contains("Materials") -> Icons.Rounded.Diamond
- else -> Icons.Rounded.WandStars
+ else -> Icons.Rounded.AutoAwesome
 }
 private fun colorsForCategory(category: String): List<Color> = when {
  category.contains("Photography") -> listOf(Color(0xFF214C63),Color(0xFFDA956A))
