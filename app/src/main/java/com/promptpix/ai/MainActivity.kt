@@ -172,10 +172,19 @@ fun AuraStudioApp() {
     onCancel = { showReview = false; editPlan = null; editStatus = "Edit cancelled. No image was generated." }
    )
   } else Scaffold(containerColor = ink, bottomBar = {
-   NavigationBar(containerColor = Color(0xFF211B2D)) {
-    NavigationBarItem(selected=true,onClick={},icon={Icon(Icons.Rounded.AutoAwesome,null)},label={Text("Discover")})
-    NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.FavoriteBorder,null)},label={Text("Saved")})
-    NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.Collections,null)},label={Text("My edits")})
+   Column {
+    if ((photoUri != null || cameraBitmap != null) && (selectedEffectTitles.isNotEmpty() || editDescription.isNotBlank())) {
+     Button(
+      onClick={ val chosen = effects.filter { it.title in selectedEffectTitles }; val combined = (chosen.map { it.title + ": " + it.instruction } + listOf(editDescription.trim()).filter { it.isNotBlank() }).joinToString("\n\n"); editPlan = interpretRequestLocally(combined); showReview = true; generatedImageUri=null },
+      modifier=Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=8.dp),
+      shape=RoundedCornerShape(14.dp)
+     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Review " + selectedEffectTitles.size + " selected style(s)") }
+    }
+    NavigationBar(containerColor = Color(0xFF211B2D)) {
+     NavigationBarItem(selected=true,onClick={},icon={Icon(Icons.Rounded.AutoAwesome,null)},label={Text("Discover")})
+     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.FavoriteBorder,null)},label={Text("Saved")})
+     NavigationBarItem(selected=false,onClick={},icon={Icon(Icons.Rounded.Collections,null)},label={Text("My edits")})
+    }
    }
   }) { padding ->
    Column(Modifier.fillMaxSize().padding(padding).padding(horizontal=18.dp).verticalScroll(rememberScrollState())) {
@@ -224,7 +233,7 @@ fun AuraStudioApp() {
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Review my edit") }
-    Text(if(selectedEffectTitles.isEmpty()) editStatus else "${selectedEffectTitles.size} style(s) selected. Add your own instructions if needed.",fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
+    Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
      Spacer(Modifier.weight(1f)); Text("${effects.size} styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
@@ -240,7 +249,7 @@ fun AuraStudioApp() {
      Row(Modifier.fillMaxWidth().padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
       rowEffects.forEach { effect ->
        val active = effect.title in selectedEffectTitles
-       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) selectedEffectTitles.remove(effect.title) else selectedEffectTitles.add(effect.title) }.padding(10.dp)) {
+       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) { selectedEffectTitles.remove(effect.title); editStatus = effect.title + " removed from your edit." } else { selectedEffectTitles.add(effect.title); editStatus = effect.title + " added. " + selectedEffectTitles.size + " style(s) selected. Use Review to continue." } }.padding(10.dp)) {
         Box(Modifier.fillMaxWidth().height(78.dp).clip(RoundedCornerShape(12.dp)).background(Brush.linearGradient(effect.colors))) {
          Icon(effect.icon,null,tint=Color.White,modifier=Modifier.align(Alignment.Center).size(34.dp))
          if(active) Icon(Icons.Rounded.CheckCircle,null,tint=Color.White,modifier=Modifier.align(Alignment.TopEnd).padding(5.dp))
