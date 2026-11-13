@@ -35,16 +35,28 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import android.net.Uri
 
-data class Effect(val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String)
+data class Effect(val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String, val command: String, val instruction: String)
 private val effects = listOf(
- Effect("Cinematic", "Portrait", Icons.Rounded.Movie, listOf(Color(0xFF123C4A),Color(0xFFE58B55)), "FILM LOOK"),
- Effect("Dreamy Bokeh", "Portrait", Icons.Rounded.BlurOn, listOf(Color(0xFF6D4A9B),Color(0xFFF4B5C8)), "SOFT FOCUS"),
- Effect("Golden Hour", "Nature", Icons.Rounded.WbSunny, listOf(Color(0xFFB95E35),Color(0xFFFFD27A)), "WARM GLOW"),
- Effect("Cyberpunk", "Art", Icons.Rounded.Bolt, listOf(Color(0xFF32106A),Color(0xFF00C9D8)), "NEON WORLD"),
- Effect("Vintage Film", "Classic", Icons.Rounded.PhotoCamera, listOf(Color(0xFF76543D),Color(0xFFE0B887)), "35MM GRAIN"),
- Effect("Fantasy", "Art", Icons.Rounded.AutoAwesome, listOf(Color(0xFF293A85),Color(0xFFCB8BDA)), "DREAM WORLD"),
- Effect("Monochrome", "Classic", Icons.Rounded.Contrast, listOf(Color(0xFF252936),Color(0xFF9EA5B3)), "B&W"),
- Effect("Editorial", "Portrait", Icons.Rounded.Camera, listOf(Color(0xFF8D345F),Color(0xFFF0A6B9)), "MAGAZINE")
+ Effect("Cinematic Portrait","Photography",Icons.Rounded.Movie,listOf(Color(0xFF123C4A),Color(0xFFE58B55)),"FILM LOOK","/cinematic","Film-inspired composition, controlled contrast and natural skin tones."),
+ Effect("Golden Hour","Lighting",Icons.Rounded.WbSunny,listOf(Color(0xFFB95E35),Color(0xFFFFD27A)),"WARM GLOW","/goldenhour","Warm low-angle golden-hour sunlight."),
+ Effect("Soft Bokeh","Lens",Icons.Rounded.BlurOn,listOf(Color(0xFF6D4A9B),Color(0xFFF4B5C8)),"SOFT FOCUS","/bokeh","Shallow depth of field with optical background blur."),
+ Effect("Rembrandt Light","Lighting",Icons.Rounded.LightMode,listOf(Color(0xFF3C3152),Color(0xFFE7A36B)),"PORTRAIT LIGHT","/rembrandt","Directional portrait lighting with a triangular cheek highlight."),
+ Effect("Rim Light","Lighting",Icons.Rounded.WbIncandescent,listOf(Color(0xFF182D48),Color(0xFF65C9D0)),"EDGE GLOW","/rimlight","Subtle edge lighting separating subject and background."),
+ Effect("35mm Film","Photography",Icons.Rounded.PhotoCamera,listOf(Color(0xFF76543D),Color(0xFFE0B887)),"ANALOG FILM","/35mmfilm","Natural film grain and gentle highlight roll-off."),
+ Effect("Monochrome","Colour",Icons.Rounded.Contrast,listOf(Color(0xFF252936),Color(0xFF9EA5B3)),"BLACK & WHITE","/monochrome","Expressive black and white with rich tonal separation."),
+ Effect("Teal & Orange","Colour",Icons.Rounded.Palette,listOf(Color(0xFF075A69),Color(0xFFE58B55)),"DUAL TONE","/tealorange","Balanced teal shadows and warm highlights."),
+ Effect("Editorial","Photography",Icons.Rounded.Article,listOf(Color(0xFF8D345F),Color(0xFFF0A6B9)),"MAGAZINE","/editorial","Polished fashion-editorial composition."),
+ Effect("Soft Light","Lighting",Icons.Rounded.WbSunny,listOf(Color(0xFF9A8B78),Color(0xFFFFE6C6)),"DIFFUSED","/softlight","Broad diffused light and gentle shadows."),
+ Effect("Macro Detail","Camera",Icons.Rounded.CenterFocusStrong,listOf(Color(0xFF174C40),Color(0xFF8FC9A8)),"MACRO","/macro","Fine close-up detail and macro depth of field."),
+ Effect("Long Exposure","Camera",Icons.Rounded.Timelapse,listOf(Color(0xFF132B59),Color(0xFFEE8C76)),"MOTION TRAILS","/longexposure","Intentional motion trails in moving elements."),
+ Effect("Atmospheric Mist","Atmosphere",Icons.Rounded.Cloud,listOf(Color(0xFF53677C),Color(0xFFC5D2D8)),"MISTY MOOD","/mist","Subtle atmospheric mist and light scattering."),
+ Effect("Rainy Mood","Atmosphere",Icons.Rounded.WaterDrop,listOf(Color(0xFF233B59),Color(0xFF7F9CB8)),"RAIN EFFECT","/rain","Rain atmosphere with wet-surface reflections."),
+ Effect("Cyberpunk","Art",Icons.Rounded.Bolt,listOf(Color(0xFF32106A),Color(0xFF00C9D8)),"NEON WORLD","/cyberpunk","Futuristic neon palette with magenta and cyan lighting."),
+ Effect("Watercolour","Art",Icons.Rounded.Brush,listOf(Color(0xFF4C9CBA),Color(0xFFE7A6B5)),"PAINTED","/watercolor","Traditional watercolour pigment texture."),
+ Effect("Anime","Art",Icons.Rounded.AutoAwesome,listOf(Color(0xFF293A85),Color(0xFFCB8BDA)),"ANIME STYLE","/anime","Polished hand-drawn anime illustration."),
+ Effect("Surreal Dreamscape","Art",Icons.Rounded.CloudQueue,listOf(Color(0xFF46366F),Color(0xFFDC91C7)),"DREAM WORLD","/surrealism","Coherent surrealist dreamlike interpretation."),
+ Effect("Product Hero","Commercial",Icons.Rounded.Inventory2,listOf(Color(0xFF27364A),Color(0xFFB8A1D8)),"STUDIO PRODUCT","/producthero","Premium commercial product photography."),
+ Effect("Vintage Photo","Photography",Icons.Rounded.PhotoAlbum,listOf(Color(0xFF76543D),Color(0xFFD8B88C)),"RETRO PRINT","/vintage","Faded tones and subtle analogue grain.")
 )
 private val ink = Color(0xFF171323)
 
@@ -104,7 +116,7 @@ fun AuraStudioApp() {
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
  val gallery = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { photoUri = it; cameraBitmap = null }
  val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { cameraBitmap = it; photoUri = null }
- val categories = listOf("All","Portrait","Nature","Art","Classic")
+ val categories = listOf("All") + effects.map { it.category }.distinct()
  val shown = effects.filter { selectedCategory == "All" || it.category == selectedCategory }
  MaterialTheme(colorScheme = darkColorScheme(
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
@@ -127,7 +139,7 @@ fun AuraStudioApp() {
    Column(Modifier.fillMaxSize().padding(padding).padding(horizontal=18.dp)) {
     Row(Modifier.fillMaxWidth().padding(top=14.dp,bottom=18.dp), verticalAlignment=Alignment.CenterVertically) {
      Box(Modifier.size(44.dp).clip(RoundedCornerShape(15.dp)).background(Brush.linearGradient(listOf(Color(0xFF9D73FF),Color(0xFFFF9D83)))), contentAlignment=Alignment.Center) {
-      Icon(Icons.Rounded.AutoAwesome, null, tint=Color.White, modifier=Modifier.size(27.dp))
+      Icon(Icons.Rounded.Camera, null, tint=Color.White, modifier=Modifier.size(27.dp))
      }
      Spacer(Modifier.width(11.dp))
      Column { Text("AURA STUDIO",fontSize=18.sp,fontWeight=FontWeight.Black,letterSpacing=1.4.sp); Text("AI PHOTO CREATION",fontSize=9.sp,color=Color(0xFFB9A9D1),letterSpacing=2.sp) }
@@ -136,7 +148,7 @@ fun AuraStudioApp() {
     }
     Text("Make every photo",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color.White)
     Text("extraordinary.",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC5A5FF))
-    Text("Choose a look or describe what you imagine.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
+    Text("Browse the effect catalogue or describe what you imagine.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
     Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))) {
      if (photoUri != null) AsyncImage(model=photoUri,contentDescription="Your selected photo",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else if (cameraBitmap != null) androidx.compose.foundation.Image(cameraBitmap!!.asImageBitmap(),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
@@ -173,7 +185,7 @@ fun AuraStudioApp() {
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
-     Spacer(Modifier.weight(1f)); Text("8 styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
+     Spacer(Modifier.weight(1f)); Text("${effects.size} styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
     }
     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top=10.dp,bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
      categories.forEach { c -> FilterChip(selected=selectedCategory==c,onClick={selectedCategory=c},label={Text(c)},shape=RoundedCornerShape(20.dp)) }
