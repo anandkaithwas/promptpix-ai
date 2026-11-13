@@ -1,16 +1,9 @@
-# Promptora
+# Aura Studio
 
-An offline-first Android creative photo-effects app. Browse visual effect styles, choose a photo from gallery or camera, and save AI-transformed results when the local inference engine is integrated.
+Offline-first Android creative photo editor. Browse visual styles or describe an edit in everyday language.
 
-## Current prototype
-- Colorful Promptora branding and launcher icon
-- Gallery and camera input
-- Visual effect cards with categories and sample-style swatches
-- Prompt text hidden from the user-facing interface
-- Honest status: current effect tiles are illustrative samples; real AI transformation and export are not yet integrated
+Current prototype includes gallery/camera selection, visual effect cards, a natural-language edit description field and a share-action scaffold. The language interpreter and image-to-image AI engine are not yet integrated. Sharing is intentionally disabled until a real generated output URI exists.
 
-## Build
-Open in Android Studio with JDK 17 and Android SDK 35. GitHub Actions builds a debug APK.
+Planned local pipeline: selected photo + natural-language instruction -> on-device instruction interpreter -> structured edit parameters -> local image-to-image model -> saved output -> Android Sharesheet.
 
-## Privacy and cost
-The intended architecture is local/offline inference with no paid API, account or subscription. Model download/storage and redistribution licences must be handled separately.
+No paid API, ads or subscription are planned. Performance and model licensing must be validated before distributing model weights.

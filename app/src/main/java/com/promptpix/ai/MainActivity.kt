@@ -1,6 +1,8 @@
 package com.promptpix.ai
 
 import android.graphics.Bitmap
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -48,11 +50,15 @@ private val ink = Color(0xFF171323)
 private val violet = Color(0xFF9A70F5)
 
 class MainActivity : ComponentActivity() {
- override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState); setContent { PromptoraApp() } }
+ override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState); setContent { AuraStudioApp() } }
 }
 
 @Composable
-fun PromptoraApp() {
+fun AuraStudioApp() {
+ val context = LocalContext.current
+ var editDescription by remember { mutableStateOf("") }
+ var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
+ var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedEffect by remember { mutableStateOf(effects.first()) }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
@@ -78,13 +84,13 @@ fun PromptoraApp() {
       Icon(Icons.Rounded.AutoAwesome, null, tint=Color.White, modifier=Modifier.size(27.dp))
      }
      Spacer(Modifier.width(11.dp))
-     Column { Text("PROMPTORA",fontSize=18.sp,fontWeight=FontWeight.Black,letterSpacing=1.4.sp); Text("AI PHOTO EFFECTS",fontSize=9.sp,color=Color(0xFFB9A9D1),letterSpacing=2.sp) }
+     Column { Text("AURA STUDIO",fontSize=18.sp,fontWeight=FontWeight.Black,letterSpacing=1.4.sp); Text("AI PHOTO CREATION",fontSize=9.sp,color=Color(0xFFB9A9D1),letterSpacing=2.sp) }
      Spacer(Modifier.weight(1f))
      IconButton(onClick={}) { Icon(Icons.Rounded.Tune,null,tint=Color(0xFFCBB7F7)) }
     }
     Text("Make every photo",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color.White)
     Text("extraordinary.",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC5A5FF))
-    Text("Choose a look. Preview the style. Keep your favourite.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=16.dp))
+    Text("Choose a look or describe what you imagine.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
     Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))) {
      if (photoUri != null) AsyncImage(model=photoUri,contentDescription="Your selected photo",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else if (cameraBitmap != null) androidx.compose.foundation.Image(cameraBitmap!!.asImageBitmap(),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
@@ -101,6 +107,24 @@ fun PromptoraApp() {
      Button(onClick={gallery.launch("image/*")},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.PhotoLibrary,null); Spacer(Modifier.width(7.dp)); Text("Gallery") }
      OutlinedButton(onClick={camera.launch(null)},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.CameraAlt,null); Spacer(Modifier.width(7.dp)); Text("Camera") }
     }
+    OutlinedTextField(
+     value=editDescription,
+     onValueChange={editDescription=it},
+     modifier=Modifier.fillMaxWidth(),
+     label={Text("Describe the change you want")},
+     placeholder={Text("e.g. Make this a warm cinematic portrait at sunset...")},
+     leadingIcon={Icon(Icons.Rounded.AutoAwesome,null)},
+     minLines=2,
+     maxLines=3,
+     shape=RoundedCornerShape(16.dp)
+    )
+    Button(
+     onClick={editStatus="Your request is captured. The on-device language interpreter and image-generation engine are not integrated yet."; generatedImageUri=null},
+     enabled=(photoUri!=null || cameraBitmap!=null) && editDescription.isNotBlank(),
+     modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
+     shape=RoundedCornerShape(14.dp)
+    ) { Icon(Icons.Rounded.WandSparkles,null); Spacer(Modifier.width(8.dp)); Text("Create my edit") }
+    Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
      Spacer(Modifier.weight(1f)); Text("8 styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
@@ -122,7 +146,24 @@ fun PromptoraApp() {
       }
      }
     }
-    Text("Effect cards are style samples. Full AI transformation is coming next.",fontSize=10.sp,color=Color(0xFF93899F),modifier=Modifier.padding(bottom=8.dp))
+    Row(Modifier.fillMaxWidth().padding(bottom=8.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+     OutlinedButton(
+      onClick={
+       generatedImageUri?.let { uri ->
+        val send=Intent(Intent.ACTION_SEND).apply {
+         type="image/*"
+         putExtra(Intent.EXTRA_STREAM,uri)
+         clipData=android.content.ClipData.newUri(context.contentResolver,"Edited photo",uri)
+         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(Intent.createChooser(send,"Share your image"))
+       }
+      },
+      enabled=generatedImageUri!=null,
+      modifier=Modifier.fillMaxWidth()
+     ) { Icon(Icons.Rounded.Share,null); Spacer(Modifier.width(7.dp)); Text("Share edited image") }
+    }
+
    }
   }
  }
