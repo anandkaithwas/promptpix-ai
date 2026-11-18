@@ -48,6 +48,12 @@ Android 8 / 3 GB RAM is the minimum compatibility target for the app shell, not 
 - Actual image-to-image model and inference runtime are not yet integrated.
 - Real generation progress, output saving and output sharing remain to be implemented and tested.
 
+## Approved high-feasibility feature increment
+
+The approved next increment includes an on-device prompt enhancer, context-aware style suggestions, adaptive hardware setup, optional HD enhancement, shuffle variations, style roulette, an intensity control and before/after comparison. See [docs/HIGH_FEASIBILITY_ROADMAP.md](docs/HIGH_FEASIBILITY_ROADMAP.md) for implementation status and acceptance criteria.
+
+Important: helper logic and diagnostics are not equivalent to a working image-generation feature. Prompt/roulette/intensity helpers must be connected to a real image-to-image engine; shuffle and comparison require genuine model outputs; HD enhancement and automatic image recognition require separately validated on-device models. No feature may fake generation or silently upload photographs.
+
 ## Development sequence
 1. Confirm Android 8 compatibility of the app shell and dependencies.
 2. Add device diagnostics and memory-safe image preprocessing.
