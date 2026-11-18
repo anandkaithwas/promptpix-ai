@@ -163,6 +163,7 @@ fun AuraStudioApp() {
  val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
+ var saveStatus by remember { mutableStateOf<String?>(null) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedStyleIds = remember { mutableStateListOf<String>() }
  var catalogueSearch by remember { mutableStateOf("") }
@@ -351,6 +352,25 @@ fun AuraStudioApp() {
     generatedBitmap?.let { result ->
      Text("GENERATED RESULT", color=Color(0xFFC7A8FF), fontSize=11.sp, fontWeight=FontWeight.Bold)
      androidx.compose.foundation.Image(result.asImageBitmap(), "Generated image", Modifier.fillMaxWidth().height(240.dp), contentScale=ContentScale.Fit)
+    }
+    generatedBitmap?.let { result ->
+     Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+      Button(onClick={
+       try {
+        val uri=V1MediaActions.saveGeneratedImage(context,result)
+        generatedImageUri=uri
+        saveStatus="Saved to Pictures/Aura Studio."
+        editStatus="Generated image saved. Original photo was not changed."
+       } catch(e:SecurityException) { saveStatus=e.message ?: "Storage permission required." }
+       catch(e:Exception) { saveStatus=e.message ?: "Could not save image." }
+      }, modifier=Modifier.weight(1f)) { Icon(Icons.Rounded.SaveAlt,null); Text("Save image") }
+      OutlinedButton(onClick={
+       val uri=generatedImageUri
+       if(uri!=null) try { V1MediaActions.shareGeneratedImage(context,uri) } catch(e:Exception) { saveStatus=e.message ?: "Could not share image." }
+       else saveStatus="Save the generated image first, then share it."
+      }, modifier=Modifier.weight(1f), enabled=generatedImageUri!=null) { Icon(Icons.Rounded.Share,null); Text("Share") }
+     }
+     saveStatus?.let { Text(it,fontSize=11.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(top=4.dp)) }
     }
     if (generatedBitmap != null && photoUri != null) {
      Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
