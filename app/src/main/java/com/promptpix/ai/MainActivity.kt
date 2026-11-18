@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import android.net.Uri
+import android.content.ContentValues
+import android.provider.MediaStore
 
 data class Effect(val id: String, val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String, val command: String, val instruction: String)
 private fun iconForCategory(category: String): androidx.compose.ui.graphics.vector.ImageVector = when {
@@ -154,6 +156,7 @@ fun AuraStudioApp() {
  var catalogueSearch by remember { mutableStateOf("") }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
+ var pendingCameraUri by remember { mutableStateOf<Uri?>(null) }
  // Prefer Android Photo Picker (no broad media permission); the contract supplies
  // a compatible fallback on older devices, including API 26–32.
  val gallery = rememberLauncherForActivityResult(
@@ -164,7 +167,23 @@ fun AuraStudioApp() {
   generatedImageUri = null
   editStatus = if (uri != null) "Photo selected. Your original remains unchanged." else "No photo selected."
  }
- val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { cameraBitmap = it; photoUri = null }
+ val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+  val capturedUri = pendingCameraUri
+  pendingCameraUri = null
+  if (success && capturedUri != null) {
+   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    val publish = ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }
+    context.contentResolver.update(capturedUri, publish, null, null)
+   }
+   photoUri = capturedUri
+   cameraBitmap = null
+   generatedImageUri = null
+   editStatus = "Full-resolution photo captured. Your original is preserved."
+  } else {
+   capturedUri?.let { context.contentResolver.delete(it, null, null) }
+   editStatus = "Camera capture cancelled or failed."
+  }
+ }
  val effects = remember { loadEffects(context) }
  val categories = listOf("All") + effects.map { it.category }.distinct()
  val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && (catalogueSearch.isBlank() || it.title.contains(catalogueSearch,true) || it.category.contains(catalogueSearch,true)) }
@@ -207,7 +226,23 @@ fun AuraStudioApp() {
     }
     Row(Modifier.fillMaxWidth().padding(top=11.dp,bottom=17.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
      Button(onClick={gallery.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.PhotoLibrary,null); Spacer(Modifier.width(7.dp)); Text("Gallery") }
-     OutlinedButton(onClick={camera.launch(null)},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.CameraAlt,null); Spacer(Modifier.width(7.dp)); Text("Camera") }
+     OutlinedButton(onClick={
+      val values = ContentValues().apply {
+       put(MediaStore.Images.Media.DISPLAY_NAME, "Aura_undefined.jpg")
+       put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Aura Studio")
+        put(MediaStore.Images.Media.IS_PENDING, 1)
+       }
+      }
+      val output = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+      if (output == null) {
+       editStatus = "Unable to prepare camera output. Check available storage."
+      } else {
+       pendingCameraUri = output
+       camera.launch(output)
+      }
+     },modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.CameraAlt,null); Spacer(Modifier.width(7.dp)); Text("Camera") }
     }
     OutlinedTextField(
      value=editDescription,
