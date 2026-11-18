@@ -98,3 +98,36 @@ object StyleSuggestions {
             .take(limit.coerceAtLeast(1))
     }
 }
+
+
+/**
+ * Selection state is keyed by stable catalogue IDs, never display names.
+ * IDs are kept unique and in user-selected order for predictable prompt assembly.
+ */
+object MultiStyleSelection {
+    const val MAX_STYLES = 4
+
+    fun toggle(currentIds: List<String>, styleId: String, availableStyles: List<Effect>): List<String> {
+        require(availableStyles.any { it.id == styleId }) { "Selected style is not in the loaded catalogue." }
+        val normalized = currentIds.distinct().filter { id -> availableStyles.any { it.id == id } }
+        return if (styleId in normalized) {
+            normalized.filterNot { it == styleId }
+        } else {
+            require(normalized.size < MAX_STYLES) { "You can combine up to $MAX_STYLES styles in one edit." }
+            normalized + styleId
+        }
+    }
+
+    fun resolve(selectedIds: List<String>, availableStyles: List<Effect>): List<Effect> {
+        val byId = availableStyles.associateBy { it.id }
+        val ids = selectedIds.distinct()
+        require(ids.size <= MAX_STYLES) { "You can combine up to $MAX_STYLES styles in one edit." }
+        require(ids.all { it in byId }) { "One or more selected styles are no longer available." }
+        return ids.map { byId.getValue(it) }
+    }
+
+    fun sanitize(selectedIds: List<String>, availableStyles: List<Effect>): List<String> {
+        val validIds = availableStyles.mapTo(hashSetOf()) { it.id }
+        return selectedIds.distinct().filter { it in validIds }.take(MAX_STYLES)
+    }
+}
