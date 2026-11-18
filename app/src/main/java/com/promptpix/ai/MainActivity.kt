@@ -411,6 +411,7 @@ fun AuraStudioApp() {
     }
     DeviceReadinessCard(context, photoUri, cameraBitmap)
     HardwareSetupCard(hardwarePlan)
+    ModelDownloadReadinessCard()
     Text("PHOTO CONTEXT & STYLE SUGGESTIONS", fontSize=11.sp, color=Color(0xFFC7A8FF), fontWeight=FontWeight.Bold, modifier=Modifier.padding(top=12.dp))
     OutlinedTextField(value=subjectDescription, onValueChange={ subjectDescription=it.take(160) }, modifier=Modifier.fillMaxWidth(), label={ Text("What is in your photo? (optional)") }, placeholder={ Text("e.g. portrait, dog, landscape, product") }, singleLine=true, shape=RoundedCornerShape(14.dp))
     if (contextSuggestions.recommendations.isNotEmpty()) {
