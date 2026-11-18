@@ -364,7 +364,7 @@ fun AuraStudioApp() {
        generationState=GenerationUiState.Preparing("Enhancing resolution…")
        try { val enhanced=generationCoordinator.enhanceHd(current); generatedBitmap=enhanced; generationState=GenerationUiState.Success(GenerationResult(enhanced,lastGenerationRequest?.seed ?: 0L,enhanced.width,enhanced.height)); editStatus="HD enhancement completed." }
        catch(e:Exception) { editStatus=e.message ?: "HD enhancement unavailable." }
-      } }, modifier=Modifier.weight(1f), enabled=generatedBitmap!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.HighQuality,null); Text("HD Enhance") }
+      } }, modifier=Modifier.weight(1f), enabled=generatedBitmap!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.AutoAwesome,null); Text("HD Enhance") }
      }
      OutlinedButton(onClick={ val request=lastGenerationRequest; if(request!=null) generationScope.launch {
       try { generationState=GenerationUiState.Preparing("Generating four genuine variations…"); val results=generationCoordinator.generateVariants(request,4) { generationState=it }; variantBitmaps=results.map { it.image }; generatedBitmap=results.first().image; generationState=GenerationUiState.Success(results.first()); editStatus="Four variations generated." }
