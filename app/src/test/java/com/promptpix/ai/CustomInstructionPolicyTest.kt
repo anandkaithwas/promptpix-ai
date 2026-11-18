@@ -24,7 +24,7 @@ class CustomInstructionPolicyTest {
 
     @Test fun interpreterCombinesCustomTextAndSelectedStyles() {
         val style = Effect("cinema", "Cinematic", "Photography",
-            androidx.compose.material.icons.Icons.Rounded.AutoAwesome,
+            androidx.compose.material.icons.Icons.Rounded.Palette,
             listOf(androidx.compose.ui.graphics.Color.Black, androidx.compose.ui.graphics.Color.White),
             "PHOTO", "/cinema", "Use cinematic lighting and film colour.")
         val prompt = V1PromptInterpreter.interpret("  Keep my face unchanged  ", listOf(style))
