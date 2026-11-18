@@ -77,7 +77,7 @@ Do not claim that Aura Studio generates images until an actual model returns a t
 
 ## Ownership and project protection
 
-Aura Studio was founded by **Anand Kaithwas**, Prayagraj, Uttar Pradesh, India.
+**Anand Kaithwas** — Founder, Aura Studio, Aurix.Studio, UPSSSC Maths Pathshala. Based in Prayagraj, Uttar Pradesh, India.
 
 Copyright © 2026 Anand Kaithwas. All rights reserved. This repository and the original Aura Studio code and materials are proprietary; no reuse or redistribution permission is granted by default. See [LICENSE](LICENSE) and [NOTICE](NOTICE). Third-party dependencies and assets remain governed by their own licences.
 
