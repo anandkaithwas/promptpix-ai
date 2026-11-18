@@ -31,11 +31,29 @@ Initial test matrix:
 
 Model weights are not bundled in the APK or native-runtime CI artifact. They will be downloaded on demand after the user sees the model size, licence, storage requirement and Wi-Fi/mobile-data choice. A model is not "free for any use" merely because its runtime is open source; each checkpoint's licence and usage restrictions must be checked independently.
 
-## Important capability gap
+## 16B decision: MNN Sana img2img
 
-MNN's documented Stable Diffusion demo currently documents text-to-image invocation. Aura Studio requires image-to-image. The first runtime build is therefore an engine packaging/ABI milestone, not proof that Generate works. Before connecting the UI, implement or identify a supported SD1.5 img2img pipeline (including VAE encode, latent noise injection/denoising strength, UNet denoising and VAE decode), then add a native smoke test using an actual input photo.
+The MNN Diffusion README documents a genuine Sana img2img mode. Its documented resource tree requires:
+- `llm/` containing the Qwen3-0.6B model files (including embeddings/blocks/lm assets)
+- `connector.mnn`
+- `projector.mnn`
+- `transformer.mnn`
+- `vae_decoder.mnn`
+- `vae_encoder.mnn` (required for img2img)
 
-Sana's documented MNN img2img path is not selected for the 3 GB baseline because its model stack includes a language model and transformer components that need separate memory feasibility testing.
+The documented demo invocation accepts `img2img`, a prompt, an input image path, output path, width/height (multiples of 32), steps, seed and CFG settings. The app now has `SanaModelPackValidator`, which fails closed when the documented required files or non-empty LLM directory are missing. This checks directory completeness only; it does not validate model provenance, tensor compatibility, or successful inference.
+
+Upstream reference: https://github.com/alibaba/MNN/blob/master/transformers/diffusion/README.md
+
+### Remaining integration work (not yet complete)
+
+The current Aura Studio MNN workflow builds native MNN libraries but does not yet build and package an Aura-specific JNI bridge that exposes SanaSession to Kotlin. The documented upstream Android app contains a Sana JNI/session implementation that can guide this integration, but it must be adapted, built against the exact MNN revision, and packaged as an optional arm64 runtime module. Model weights are not yet selected or downloadable; do not enable 16B in the UI until the model licence, artifact URLs, exact sizes, SHA-256 hashes and device memory requirements are verified.
+
+Sana's Qwen3-0.6B + DiT stack may exceed the practical memory budget of a 3 GB-class device. It is an experimental optional engine, not a default OPPO F27 Pro+ capability. Start at 512x512 only after a measured memory preflight; if the device cannot sustain it, report unsupported rather than falling back to fake output.
+
+### 16A / 16B separation
+
+16A remains the lightweight style-transfer path. 16B is the prompt-conditioned Sana img2img path. They must have separate model packs, runtime checks and measured capability profiles.
 
 ## Acceptance gates
 
