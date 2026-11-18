@@ -160,6 +160,15 @@ fun AuraStudioApp() {
  var lastGenerationRequest by remember { mutableStateOf<GenerationRequest?>(null) }
  var variantBitmaps by remember { mutableStateOf<List<Bitmap>>(emptyList()) }
  val generationScope = rememberCoroutineScope()
+ val legacySavePermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+  val bitmap = generatedBitmap
+  if (granted && bitmap != null) {
+   try {
+    generatedImageUri = V1MediaActions.saveGeneratedImage(context, bitmap)
+    saveStatus = "Saved to Pictures/Aura Studio."
+   } catch (error: Exception) { saveStatus = error.message ?: "Could not save image." }
+  } else saveStatus = "Storage permission was not granted; image was not saved."
+ }
  val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -356,13 +365,16 @@ fun AuraStudioApp() {
     generatedBitmap?.let { result ->
      Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
       Button(onClick={
-       try {
-        val uri=V1MediaActions.saveGeneratedImage(context,result)
-        generatedImageUri=uri
-        saveStatus="Saved to Pictures/Aura Studio."
-        editStatus="Generated image saved. Original photo was not changed."
-       } catch(e:SecurityException) { saveStatus=e.message ?: "Storage permission required." }
-       catch(e:Exception) { saveStatus=e.message ?: "Could not save image." }
+       if (Build.VERSION.SDK_INT <= 28 && context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        legacySavePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+       } else {
+        try {
+         val uri=V1MediaActions.saveGeneratedImage(context,result)
+         generatedImageUri=uri
+         saveStatus="Saved to Pictures/Aura Studio."
+         editStatus="Generated image saved. Original photo was not changed."
+        } catch(e:Exception) { saveStatus=e.message ?: "Could not save image." }
+       }
       }, modifier=Modifier.weight(1f)) { Icon(Icons.Rounded.SaveAlt,null); Text("Save image") }
       OutlinedButton(onClick={
        val uri=generatedImageUri
