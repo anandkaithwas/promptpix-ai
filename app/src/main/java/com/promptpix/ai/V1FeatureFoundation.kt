@@ -237,3 +237,16 @@ object StyleCatalogueValidator {
         return styles
     }
 }
+
+
+/** Case-insensitive search across all user-relevant style metadata. */
+object StyleCatalogueSearch {
+    fun matches(style: Effect, query: String): Boolean {
+        val term = query.trim()
+        if (term.isEmpty()) return true
+        return style.title.contains(term, ignoreCase = true) ||
+            style.category.contains(term, ignoreCase = true) ||
+            style.instruction.contains(term, ignoreCase = true) ||
+            style.id.contains(term, ignoreCase = true)
+    }
+}
