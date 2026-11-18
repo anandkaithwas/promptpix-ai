@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -157,6 +158,7 @@ fun AuraStudioApp() {
  var photoUri by remember { mutableStateOf<Uri?>(null) }
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
  var pendingCameraUri by remember { mutableStateOf<Uri?>(null) }
+ var showPhotoPreview by remember { mutableStateOf(false) }
  // Prefer Android Photo Picker (no broad media permission); the contract supplies
  // a compatible fallback on older devices, including API 26–32.
  val gallery = rememberLauncherForActivityResult(
@@ -208,7 +210,8 @@ fun AuraStudioApp() {
     Text("Make every photo",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color.White)
     Text("extraordinary.",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC5A5FF))
     Text("Choose from 275+ transformations or describe your own edit.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
-    Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))) {
+    Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))
+     .clickable(enabled = photoUri != null || cameraBitmap != null) { showPhotoPreview = true }) {
      if (photoUri != null) AsyncImage(model=photoUri,contentDescription="Your selected photo",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else if (cameraBitmap != null) androidx.compose.foundation.Image(cameraBitmap!!.asImageBitmap(),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else {
@@ -229,6 +232,41 @@ fun AuraStudioApp() {
       pendingCameraUri = output
       camera.launch(output)
      },modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.CameraAlt,null); Spacer(Modifier.width(7.dp)); Text("Camera") }
+    }
+    if (showPhotoPreview && (photoUri != null || cameraBitmap != null)) {
+     Dialog(onDismissRequest = { showPhotoPreview = false }) {
+      Box(
+       Modifier.fillMaxWidth().fillMaxHeight(0.82f)
+        .clip(RoundedCornerShape(18.dp))
+        .background(Color.Black)
+        .clickable { showPhotoPreview = false },
+       contentAlignment = Alignment.Center
+      ) {
+       if (photoUri != null) {
+        AsyncImage(
+         model = photoUri,
+         contentDescription = "Full-screen source photo preview",
+         modifier = Modifier.fillMaxSize(),
+         contentScale = ContentScale.Fit,
+         onError = { editStatus = "Could not decode this photo. Try another image format." }
+        )
+       } else {
+        androidx.compose.foundation.Image(
+         cameraBitmap!!.asImageBitmap(),
+         contentDescription = "Full-screen camera photo preview",
+         modifier = Modifier.fillMaxSize(),
+         contentScale = ContentScale.Fit
+        )
+       }
+       Text(
+        "Tap outside or back to close",
+        Modifier.align(Alignment.BottomCenter).padding(12.dp)
+         .background(Color.Black.copy(alpha = .65f), RoundedCornerShape(8.dp))
+         .padding(horizontal = 10.dp, vertical = 7.dp),
+        color = Color.White, fontSize = 11.sp
+       )
+      }
+     }
     }
     OutlinedTextField(
      value=editDescription,
