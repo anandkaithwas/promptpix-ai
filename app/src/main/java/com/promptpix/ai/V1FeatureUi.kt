@@ -27,6 +27,7 @@ import kotlin.random.Random
 @Composable
 fun V1CreativeControls(
     styles: List<Effect>,
+    availableStyles: List<Effect> = styles,
     customPrompt: String,
     onPromptPreview: (PromptBundle) -> Unit,
     onRoulette: (List<Effect>) -> Unit,
@@ -58,7 +59,7 @@ fun V1CreativeControls(
                 }, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Rounded.AutoAwesome, null); Spacer(Modifier.width(5.dp)); Text("Enhance prompt")
                 }
-                OutlinedButton(onClick = { onRoulette(StyleRoulette.spin(styles, Random.Default, 3)) }, modifier = Modifier.weight(1f)) {
+                OutlinedButton(onClick = { onRoulette(StyleRoulette.spin(availableStyles, Random.Default, 3)) }, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Rounded.Casino, null); Spacer(Modifier.width(5.dp)); Text("Style roulette")
                 }
             }
