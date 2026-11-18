@@ -65,11 +65,14 @@ object V1FeatureRegistry {
     init { check(all.size == 33) { "V1.0 feature registry must contain exactly 33 entries." } }
 }
 
+enum class PromptIntent { PORTRAIT, LANDSCAPE, PRODUCT, STYLE_TRANSFER, LIGHTING, BACKGROUND, GENERAL }
+
 data class PromptBundle(
     val userRequest: String,
     val positivePrompt: String,
     val preservationPrompt: String,
-    val qualityPrompt: String
+    val qualityPrompt: String,
+    val intent: PromptIntent = PromptIntent.GENERAL
 ) {
     val combined: String get() = listOf(userRequest, positivePrompt, preservationPrompt, qualityPrompt)
         .filter(String::isNotBlank).joinToString("\n")
@@ -82,7 +85,8 @@ object V1PromptInterpreter {
             userRequest = request.trim(),
             positivePrompt = enhanced.positivePrompt,
             preservationPrompt = enhanced.preservationInstruction,
-            qualityPrompt = enhanced.qualityInstruction
+            qualityPrompt = enhanced.qualityInstruction,
+            intent = PromptIntentInterpreter.classify(request)
         )
     }
 }
