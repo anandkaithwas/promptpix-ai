@@ -212,3 +212,28 @@ interface ModelAssetInstaller {
 
 /** Basic output metadata. Source and output are separate references by design. */
 data class SavedEdit(val id: String = UUID.randomUUID().toString(), val sourceUri: Uri, val outputUri: Uri, val createdAtMillis: Long, val prompt: String, val seed: Long)
+
+
+/** Runtime integrity gate for the bundled catalogue; malformed data fails clearly at startup. */
+object StyleCatalogueValidator {
+    const val EXPECTED_STYLE_COUNT = 275
+
+    fun validate(styles: List<Effect>): List<Effect> {
+        require(styles.size == EXPECTED_STYLE_COUNT) {
+            "Style catalogue is incomplete: expected $EXPECTED_STYLE_COUNT entries, found ${styles.size}."
+        }
+        require(styles.all { it.id.isNotBlank() && it.title.isNotBlank() && it.category.isNotBlank() && it.instruction.isNotBlank() }) {
+            "Style catalogue contains an entry with missing ID, name, category or instruction."
+        }
+        require(styles.map { it.id }.distinct().size == styles.size) {
+            "Style catalogue contains duplicate style IDs."
+        }
+        require(styles.map { it.title }.distinct().size == styles.size) {
+            "Style catalogue contains duplicate style names."
+        }
+        require(styles.map { it.category }.distinct().size >= 2) {
+            "Style catalogue must contain multiple categories."
+        }
+        return styles
+    }
+}
