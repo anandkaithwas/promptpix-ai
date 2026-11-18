@@ -131,3 +131,22 @@ object MultiStyleSelection {
         return selectedIds.distinct().filter { it in validIds }.take(MAX_STYLES)
     }
 }
+
+
+/** Validation boundary for user-authored generation instructions. */
+sealed interface InstructionValidation {
+    data class Valid(val value: String) : InstructionValidation
+    data class Invalid(val reason: String) : InstructionValidation
+}
+
+object CustomInstructionPolicy {
+    const val MAX_LENGTH = 1000
+
+    fun validate(raw: String): InstructionValidation {
+        val value = raw.trim()
+        if (value.isEmpty()) return InstructionValidation.Invalid("Describe an edit or select at least one style.")
+        if (value.length > MAX_LENGTH) return InstructionValidation.Invalid("Instructions must be $MAX_LENGTH characters or fewer.")
+        if (value.any { it == '\u0000' }) return InstructionValidation.Invalid("Instructions contain an unsupported control character.")
+        return InstructionValidation.Valid(value)
+    }
+}
