@@ -54,6 +54,17 @@ The approved next increment includes an on-device prompt enhancer, context-aware
 
 Important: helper logic and diagnostics are not equivalent to a working image-generation feature. Prompt/roulette/intensity helpers must be connected to a real image-to-image engine; shuffle and comparison require genuine model outputs; HD enhancement and automatic image recognition require separately validated on-device models. No feature may fake generation or silently upload photographs.
 
+## Approved future development backlog
+
+The following five capabilities are approved for later development and are documented with dependencies and acceptance criteria in [docs/HIGH_FEASIBILITY_ROADMAP.md](docs/HIGH_FEASIBILITY_ROADMAP.md):
+- Magic Brush / selective inpainting.
+- Face Protect / background-only mode.
+- Genuine generation time-lapse export.
+- Non-destructive edit history.
+- Offline Style Recipes with QR and JSON import/export.
+
+They are roadmap commitments, not implemented features. Their controls must not be presented as functional until their model/runtime dependencies and acceptance tests pass.
+
 ## Development sequence
 1. Confirm Android 8 compatibility of the app shell and dependencies.
 2. Add device diagnostics and memory-safe image preprocessing.
