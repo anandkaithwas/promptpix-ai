@@ -511,7 +511,7 @@ fun AuraStudioApp() {
     HorizontalDivider(color = Color(0xFF494052))
     Column(Modifier.fillMaxWidth().padding(vertical = 18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
      Text("AURA STUDIO", fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp, color = Color(0xFFC7A8FF))
-     Text("Founded by Anand Kaithwas", fontSize = 12.sp, color = Color(0xFFF7F1FF), fontWeight = FontWeight.SemiBold)
+     Text("Founder — Aura Studio, Aurix.Studio, UPSSSC Maths Pathshala", fontSize = 12.sp, color = Color(0xFFF7F1FF), fontWeight = FontWeight.SemiBold)
      Text("Prayagraj, Uttar Pradesh, India", fontSize = 10.sp, color = Color(0xFFB9B0C7))
      Text("© 2026 Anand Kaithwas. All rights reserved.", fontSize = 9.sp, color = Color(0xFF8F879A), modifier = Modifier.padding(top = 4.dp))
     }
