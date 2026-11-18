@@ -223,11 +223,6 @@ fun AuraStudioApp() {
     Row(Modifier.fillMaxWidth().padding(top=11.dp,bottom=17.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
      Button(onClick={gallery.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.PhotoLibrary,null); Spacer(Modifier.width(7.dp)); Text("Gallery") }
      OutlinedButton(onClick={
-      val values = ContentValues().apply {
-       // Store the capture temporarily in app-private cache; no media-library
-       // permission or public write is needed just to take a photo.
-      
-      }
       val cameraDir = File(context.cacheDir, "camera").apply { mkdirs() }
       val outputFile = File.createTempFile("aura_capture_", ".jpg", cameraDir)
       val output = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", outputFile)
