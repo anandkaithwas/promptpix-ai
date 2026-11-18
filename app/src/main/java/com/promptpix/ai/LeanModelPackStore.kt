@@ -76,7 +76,7 @@ class LeanModelPackStore(context: Context) {
     ): LeanModelInstallResult = withContext(Dispatchers.IO) {
         requireUnmeteredNetwork()
         require(availableBytes() >= spec.expectedBytes + MIN_FREE_SPACE_BYTES) {
-            "Not enough free storage. Keep at least 100 MB free before installing a model."
+            "Not enough free storage. Keep at least 16 MB free beyond the model size."
         }
         installedModel(spec)?.let {
             return@withContext LeanModelInstallResult(it, it.length(), spec.sha256.lowercase())
