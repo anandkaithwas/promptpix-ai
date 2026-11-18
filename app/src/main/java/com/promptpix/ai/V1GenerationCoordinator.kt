@@ -30,6 +30,21 @@ class V1GenerationCoordinator(
         return run(request)
     }
 
+    suspend fun generateVariants(request: GenerationRequest, count: Int = 4): List<GenerationResult> {
+        require(count in 1..4) { "Variant count must be between one and four." }
+        lastRequest = request
+        val outputs = mutableListOf<GenerationResult>()
+        repeat(count) { index ->
+            val seed = if (index == 0) request.seed else V1Shuffle.nextSeed(outputs.last().seed).seed
+            when (val outcome = run(request.copy(seed = seed))) {
+                is GenerationUiState.Success -> outputs += outcome.result
+                is GenerationUiState.Failed -> throw IllegalStateException(outcome.message)
+                else -> throw IllegalStateException("Variant generation did not complete.")
+            }
+        }
+        return outputs
+    }
+
     suspend fun shuffle(): GenerationUiState {
         val previous = lastRequest
             ?: return GenerationUiState.Failed("Generate an image before using Try Again.")
