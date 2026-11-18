@@ -144,8 +144,11 @@ class LeanModelPackStore(context: Context) {
         check(capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
             "No internet connection is available."
         }
-        check(capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)) {
-            "To save mobile data, model downloads are Wi-Fi only."
+        check(
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+                capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+        ) {
+            "To save mobile data, model downloads require unmetered Wi-Fi."
         }
     }
 
