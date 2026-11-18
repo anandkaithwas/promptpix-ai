@@ -152,6 +152,7 @@ class MainActivity : ComponentActivity() {
 fun AuraStudioApp() {
  val context = LocalContext.current
  var editDescription by remember { mutableStateOf("") }
+ var subjectDescription by remember { mutableStateOf("") }
  var generationState by remember { mutableStateOf<GenerationUiState>(GenerationUiState.Idle) }
  var generationIntensity by remember { mutableIntStateOf(50) }
  var generatedBitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -194,6 +195,8 @@ fun AuraStudioApp() {
  val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && StyleCatalogueSearch.matches(it, catalogueSearch) }
  val selectedStyles = MultiStyleSelection.resolve(selectedStyleIds, effects)
  val selectedEffect = selectedStyles.firstOrNull() ?: effects.first()
+ val contextSuggestions = remember(subjectDescription, effects) { V1ContextSuggestionService(UnconfiguredOfflineImageLabeler()).suggestFromUserDescription(subjectDescription, effects) }
+ val hardwarePlan = remember { V1HardwareSetup.plan(V1DeviceManager.inspect(context)) }
  MaterialTheme(colorScheme = darkColorScheme(
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
@@ -345,6 +348,23 @@ fun AuraStudioApp() {
      androidx.compose.foundation.Image(result.asImageBitmap(), "Generated image", Modifier.fillMaxWidth().height(240.dp), contentScale=ContentScale.Fit)
     }
     DeviceReadinessCard(context, photoUri, cameraBitmap)
+    HardwareSetupCard(hardwarePlan)
+    Text("PHOTO CONTEXT & STYLE SUGGESTIONS", fontSize=11.sp, color=Color(0xFFC7A8FF), fontWeight=FontWeight.Bold, modifier=Modifier.padding(top=12.dp))
+    OutlinedTextField(value=subjectDescription, onValueChange={ subjectDescription=it.take(160) }, modifier=Modifier.fillMaxWidth(), label={ Text("What is in your photo? (optional)") }, placeholder={ Text("e.g. portrait, dog, landscape, product") }, singleLine=true, shape=RoundedCornerShape(14.dp))
+    if (contextSuggestions.recommendations.isNotEmpty()) {
+     Text("Suggested from your description (not automatic image recognition)", fontSize=10.sp, color=Color.LightGray)
+     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement=Arrangement.spacedBy(6.dp)) {
+      contextSuggestions.recommendations.take(8).forEach { recommendation ->
+       AssistChip(onClick={
+        try {
+         val updated=MultiStyleSelection.toggle(selectedStyleIds.toList(), recommendation.id, effects)
+         selectedStyleIds.clear(); selectedStyleIds.addAll(updated)
+         editStatus=recommendation.title+" added from suggestions."
+        } catch (error: IllegalArgumentException) { editStatus=error.message ?: "Could not add suggestion." }
+       }, label={ Text(recommendation.title) })
+      }
+     }
+    }
     V1CreativeControls(
      styles = selectedStyles,
      availableStyles = effects,
