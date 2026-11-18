@@ -160,6 +160,8 @@ fun AuraStudioApp() {
  var lastGenerationRequest by remember { mutableStateOf<GenerationRequest?>(null) }
  var variantBitmaps by remember { mutableStateOf<List<Bitmap>>(emptyList()) }
  val generationScope = rememberCoroutineScope()
+ var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
+ var saveStatus by remember { mutableStateOf<String?>(null) }
  val legacySavePermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
   val bitmap = generatedBitmap
   if (granted && bitmap != null) {
@@ -171,8 +173,6 @@ fun AuraStudioApp() {
  }
  val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
- var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
- var saveStatus by remember { mutableStateOf<String?>(null) }
  var selectedCategory by remember { mutableStateOf("All") }
  var selectedStyleIds = remember { mutableStateListOf<String>() }
  var catalogueSearch by remember { mutableStateOf("") }
