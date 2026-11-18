@@ -48,6 +48,23 @@ Android 8 / 3 GB RAM is the minimum compatibility target for the app shell, not 
 - Actual image-to-image model and inference runtime are not yet integrated.
 - Real generation progress, output saving and output sharing remain to be implemented and tested.
 
+## Approved high-feasibility feature increment
+
+The approved next increment includes an on-device prompt enhancer, context-aware style suggestions, adaptive hardware setup, optional HD enhancement, shuffle variations, style roulette, an intensity control and before/after comparison. See [docs/HIGH_FEASIBILITY_ROADMAP.md](docs/HIGH_FEASIBILITY_ROADMAP.md) for implementation status and acceptance criteria.
+
+Important: helper logic and diagnostics are not equivalent to a working image-generation feature. Prompt/roulette/intensity helpers must be connected to a real image-to-image engine; shuffle and comparison require genuine model outputs; HD enhancement and automatic image recognition require separately validated on-device models. No feature may fake generation or silently upload photographs.
+
+## Approved future development backlog
+
+The following five capabilities are approved for later development and are documented with dependencies and acceptance criteria in [docs/HIGH_FEASIBILITY_ROADMAP.md](docs/HIGH_FEASIBILITY_ROADMAP.md):
+- Magic Brush / selective inpainting.
+- Face Protect / background-only mode.
+- Genuine generation time-lapse export.
+- Non-destructive edit history.
+- Offline Style Recipes with QR and JSON import/export.
+
+They are roadmap commitments, not implemented features. Their controls must not be presented as functional until their model/runtime dependencies and acceptance tests pass.
+
 ## Development sequence
 1. Confirm Android 8 compatibility of the app shell and dependencies.
 2. Add device diagnostics and memory-safe image preprocessing.
@@ -57,3 +74,11 @@ Android 8 / 3 GB RAM is the minimum compatibility target for the app shell, not 
 6. Add actual progress, result comparison, save and share.
 
 Do not claim that Aura Studio generates images until an actual model returns a transformed image.
+
+## Ownership and project protection
+
+**Anand Kaithwas** — Founder, Aura Studio, Aurix.Studio, UPSSSC Maths Pathshala. Based in Prayagraj, Uttar Pradesh, India.
+
+Copyright © 2026 Anand Kaithwas. All rights reserved. This repository and the original Aura Studio code and materials are proprietary; no reuse or redistribution permission is granted by default. See [LICENSE](LICENSE) and [NOTICE](NOTICE). Third-party dependencies and assets remain governed by their own licences.
+
+Release builds enable R8 code shrinking, optimisation and obfuscation. This raises the cost of casual reverse engineering but cannot make an APK impossible to inspect or copy. Keep the source repository private and do not embed secrets in the client.

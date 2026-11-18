@@ -32,11 +32,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import android.net.Uri
+import androidx.core.content.FileProvider
+import java.io.File
+import kotlinx.coroutines.launch
 
 data class Effect(val id: String, val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String, val command: String, val instruction: String)
 private fun iconForCategory(category: String): androidx.compose.ui.graphics.vector.ImageVector = when {
@@ -94,10 +98,11 @@ private fun colorsForCategory(category: String): List<Color> = when {
 private fun loadEffects(context: android.content.Context): List<Effect> {
  val root = org.json.JSONObject(context.assets.open("catalogue/styles.json").bufferedReader().use { it.readText() })
  val array = root.getJSONArray("styles")
- return (0 until array.length()).map { i ->
+ val loaded = (0 until array.length()).map { i ->
   val item = array.getJSONObject(i); val category = item.getString("category")
   Effect(item.getString("id"),item.getString("name"),category,iconForStyle(item.getString("name"),category),colorsForCategory(category),category.uppercase(),"/"+item.getString("id"),item.getString("instruction"))
  }
+ return StyleCatalogueValidator.validate(loaded)
 }
 private val ink = Color(0xFF171323)
 
@@ -147,19 +152,64 @@ class MainActivity : ComponentActivity() {
 fun AuraStudioApp() {
  val context = LocalContext.current
  var editDescription by remember { mutableStateOf("") }
- var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
+ var subjectDescription by remember { mutableStateOf("") }
+ var generationState by remember { mutableStateOf<GenerationUiState>(GenerationUiState.Idle) }
+ var generationIntensity by remember { mutableIntStateOf(50) }
+ var generatedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+ var originalCompareBitmap by remember { mutableStateOf<Bitmap?>(null) }
+ var lastGenerationRequest by remember { mutableStateOf<GenerationRequest?>(null) }
+ var variantBitmaps by remember { mutableStateOf<List<Bitmap>>(emptyList()) }
+ val generationScope = rememberCoroutineScope()
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
+ var saveStatus by remember { mutableStateOf<String?>(null) }
+ val legacySavePermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+  val bitmap = generatedBitmap
+  if (granted && bitmap != null) {
+   try {
+    generatedImageUri = V1MediaActions.saveGeneratedImage(context, bitmap)
+    saveStatus = "Saved to Pictures/Aura Studio."
+   } catch (error: Exception) { saveStatus = error.message ?: "Could not save image." }
+  } else saveStatus = "Storage permission was not granted; image was not saved."
+ }
+ val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
+ var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
  var selectedCategory by remember { mutableStateOf("All") }
- var selectedEffectTitles = remember { mutableStateListOf<String>() }
+ var selectedStyleIds = remember { mutableStateListOf<String>() }
  var catalogueSearch by remember { mutableStateOf("") }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
- val gallery = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { photoUri = it; cameraBitmap = null }
- val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { cameraBitmap = it; photoUri = null }
+ var pendingCameraUri by remember { mutableStateOf<Uri?>(null) }
+ var showPhotoPreview by remember { mutableStateOf(false) }
+ // Prefer Android Photo Picker (no broad media permission); the contract supplies
+ // a compatible fallback on older devices, including API 26–32.
+ val gallery = rememberLauncherForActivityResult(
+  ActivityResultContracts.PickVisualMedia()
+ ) { uri ->
+  photoUri = uri
+  cameraBitmap = null
+  generatedImageUri = null
+  editStatus = if (uri != null) "Photo selected. Your original remains unchanged." else "No photo selected."
+ }
+ val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+  val capturedUri = pendingCameraUri
+  pendingCameraUri = null
+  if (success && capturedUri != null) {
+   photoUri = capturedUri
+   cameraBitmap = null
+   generatedImageUri = null
+   editStatus = "Full-resolution photo captured. Your original is preserved."
+  } else {
+   capturedUri?.let { context.contentResolver.delete(it, null, null) }
+   editStatus = "Camera capture cancelled or failed."
+  }
+ }
  val effects = remember { loadEffects(context) }
  val categories = listOf("All") + effects.map { it.category }.distinct()
- val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && (catalogueSearch.isBlank() || it.title.contains(catalogueSearch,true) || it.category.contains(catalogueSearch,true)) }
- val selectedEffect = effects.firstOrNull { it.title in selectedEffectTitles } ?: effects.first()
+ val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && StyleCatalogueSearch.matches(it, catalogueSearch) }
+ val selectedStyles = MultiStyleSelection.resolve(selectedStyleIds, effects)
+ val selectedEffect = selectedStyles.firstOrNull() ?: effects.first()
+ val contextSuggestions = remember(subjectDescription, effects) { V1ContextSuggestionService(UnconfiguredOfflineImageLabeler()).suggestFromUserDescription(subjectDescription, effects) }
+ val hardwarePlan = remember { V1HardwareSetup.plan(V1DeviceManager.inspect(context)) }
  MaterialTheme(colorScheme = darkColorScheme(
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
@@ -184,7 +234,8 @@ fun AuraStudioApp() {
     Text("Make every photo",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color.White)
     Text("extraordinary.",fontSize=29.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC5A5FF))
     Text("Choose from 275+ transformations or describe your own edit.",fontSize=13.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(top=5.dp,bottom=12.dp))
-    Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))) {
+    Box(Modifier.fillMaxWidth().height(205.dp).clip(RoundedCornerShape(24.dp)).background(Brush.linearGradient(selectedEffect.colors))
+     .clickable(enabled = photoUri != null || cameraBitmap != null) { showPhotoPreview = true }) {
      if (photoUri != null) AsyncImage(model=photoUri,contentDescription="Your selected photo",modifier=Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else if (cameraBitmap != null) androidx.compose.foundation.Image(cameraBitmap!!.asImageBitmap(),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
      else {
@@ -197,12 +248,53 @@ fun AuraStudioApp() {
      if(photoUri==null && cameraBitmap==null) Text(selectedEffect.sample,Modifier.align(Alignment.BottomEnd).padding(14.dp),color=Color.White,fontSize=10.sp,fontWeight=FontWeight.Bold)
     }
     Row(Modifier.fillMaxWidth().padding(top=11.dp,bottom=17.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
-     Button(onClick={gallery.launch("image/*")},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.PhotoLibrary,null); Spacer(Modifier.width(7.dp)); Text("Gallery") }
-     OutlinedButton(onClick={camera.launch(null)},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.CameraAlt,null); Spacer(Modifier.width(7.dp)); Text("Camera") }
+     Button(onClick={gallery.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.PhotoLibrary,null); Spacer(Modifier.width(7.dp)); Text("Gallery") }
+     OutlinedButton(onClick={
+      val cameraDir = File(context.cacheDir, "camera").apply { mkdirs() }
+      val outputFile = File.createTempFile("aura_capture_", ".jpg", cameraDir)
+      val output = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", outputFile)
+      pendingCameraUri = output
+      camera.launch(output)
+     },modifier=Modifier.weight(1f),shape=RoundedCornerShape(14.dp)) { Icon(Icons.Rounded.CameraAlt,null); Spacer(Modifier.width(7.dp)); Text("Camera") }
+    }
+    if (showPhotoPreview && (photoUri != null || cameraBitmap != null)) {
+     Dialog(onDismissRequest = { showPhotoPreview = false }) {
+      Box(
+       Modifier.fillMaxWidth().fillMaxHeight(0.82f)
+        .clip(RoundedCornerShape(18.dp))
+        .background(Color.Black)
+        .clickable { showPhotoPreview = false },
+       contentAlignment = Alignment.Center
+      ) {
+       if (photoUri != null) {
+        AsyncImage(
+         model = photoUri,
+         contentDescription = "Full-screen source photo preview",
+         modifier = Modifier.fillMaxSize(),
+         contentScale = ContentScale.Fit,
+         onError = { editStatus = "Could not decode this photo. Try another image format." }
+        )
+       } else {
+        androidx.compose.foundation.Image(
+         cameraBitmap!!.asImageBitmap(),
+         contentDescription = "Full-screen camera photo preview",
+         modifier = Modifier.fillMaxSize(),
+         contentScale = ContentScale.Fit
+        )
+       }
+       Text(
+        "Tap outside or back to close",
+        Modifier.align(Alignment.BottomCenter).padding(12.dp)
+         .background(Color.Black.copy(alpha = .65f), RoundedCornerShape(8.dp))
+         .padding(horizontal = 10.dp, vertical = 7.dp),
+        color = Color.White, fontSize = 11.sp
+       )
+      }
+     }
     }
     OutlinedTextField(
      value=editDescription,
-     onValueChange={editDescription=it},
+     onValueChange={editDescription=it.take(CustomInstructionPolicy.MAX_LENGTH)},
      modifier=Modifier.fillMaxWidth(),
      label={Text("Describe the change you want")},
      placeholder={Text("e.g. Make this a warm cinematic portrait at sunset...")},
@@ -213,32 +305,179 @@ fun AuraStudioApp() {
     )
     Button(
      onClick={
-      generatedImageUri = null
-      editStatus = "AI generation is not connected yet. The selected photo and edit instructions are ready, but an image model must be integrated before an edited image can be produced."
+      val source = photoUri
+      if (source == null) {
+       editStatus = "Select a photo from Gallery or Camera before generating."
+      } else {
+       val instruction = if (editDescription.isBlank() && selectedStyles.isNotEmpty()) "" else when (val validation = CustomInstructionPolicy.validate(editDescription)) {
+        is InstructionValidation.Invalid -> {
+         editStatus = validation.reason
+         null
+        }
+        is InstructionValidation.Valid -> validation.value
+       }
+       if (instruction != null) {
+         val prompt = V1PromptInterpreter.interpret(instruction, selectedStyles)
+         val request = GenerationRequest(
+          source = source,
+          prompt = prompt,
+          selectedStyleIds = selectedStyles.map { it.id },
+          intensity = generationIntensity,
+          seed = kotlin.random.Random.nextLong(),
+          requestedWidth = 512,
+          requestedHeight = 512
+         )
+         generatedImageUri = null
+         generatedBitmap = null
+         variantBitmaps = emptyList()
+         lastGenerationRequest = request
+         editStatus = "Preparing local image generation…"
+         generationScope.launch {
+          generationState = GenerationUiState.Preparing()
+          generationState = generationCoordinator.generate(request) { generationState = it }
+          editStatus = when (val state = generationState) {
+           is GenerationUiState.Success -> {
+            generatedBitmap = state.result.image
+            "Generation complete. Your original photo remains unchanged."
+           }
+           is GenerationUiState.Failed -> state.message
+           else -> "Generation stopped."
+          }
+         }
+       }
+      }
      },
-     enabled=(photoUri!=null || cameraBitmap!=null) && (editDescription.isNotBlank() || selectedEffectTitles.isNotEmpty()),
+     enabled=photoUri!=null && (editDescription.isNotBlank() || selectedStyleIds.isNotEmpty()) && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running,
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Generate") }
+    if (generationState is GenerationUiState.Running) {
+     val progress = (generationState as GenerationUiState.Running).progress
+     if (progress != null) LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
+     else LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+    }
+    if (generationState is GenerationUiState.Preparing) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
+    generatedBitmap?.let { result ->
+     Text("GENERATED RESULT", color=Color(0xFFC7A8FF), fontSize=11.sp, fontWeight=FontWeight.Bold)
+     androidx.compose.foundation.Image(result.asImageBitmap(), "Generated image", Modifier.fillMaxWidth().height(240.dp), contentScale=ContentScale.Fit)
+    }
+    generatedBitmap?.let { result ->
+     Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+      Button(onClick={
+       if (Build.VERSION.SDK_INT <= 28 && context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        legacySavePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+       } else {
+        try {
+         val uri=V1MediaActions.saveGeneratedImage(context,result)
+         generatedImageUri=uri
+         saveStatus="Saved to Pictures/Aura Studio."
+         editStatus="Generated image saved. Original photo was not changed."
+        } catch(e:Exception) { saveStatus=e.message ?: "Could not save image." }
+       }
+      }, modifier=Modifier.weight(1f)) { Icon(Icons.Rounded.SaveAlt,null); Text("Save image") }
+      OutlinedButton(onClick={
+       val uri=generatedImageUri
+       if(uri!=null) try { V1MediaActions.shareGeneratedImage(context,uri) } catch(e:Exception) { saveStatus=e.message ?: "Could not share image." }
+       else saveStatus="Save the generated image first, then share it."
+      }, modifier=Modifier.weight(1f), enabled=generatedImageUri!=null) { Icon(Icons.Rounded.Share,null); Text("Share") }
+     }
+     saveStatus?.let { Text(it,fontSize=11.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(top=4.dp)) }
+    }
+    if (generatedBitmap != null && photoUri != null) {
+     Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+      OutlinedButton(onClick={ generationScope.launch {
+       generationState=GenerationUiState.Preparing("Creating another variation…")
+       generationState=generationCoordinator.shuffle { generationState=it }
+       if(generationState is GenerationUiState.Success) { generatedBitmap=(generationState as GenerationUiState.Success).result.image; editStatus="New variation generated with a different seed." }
+       else if(generationState is GenerationUiState.Failed) editStatus=(generationState as GenerationUiState.Failed).message
+      } }, modifier=Modifier.weight(1f), enabled=lastGenerationRequest!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.Refresh,null); Text("Try again") }
+      OutlinedButton(onClick={ val current=generatedBitmap; if(current!=null) generationScope.launch {
+       generationState=GenerationUiState.Preparing("Enhancing resolution…")
+       try { val enhanced=generationCoordinator.enhanceHd(current); generatedBitmap=enhanced; generationState=GenerationUiState.Success(GenerationResult(enhanced,lastGenerationRequest?.seed ?: 0L,enhanced.width,enhanced.height)); editStatus="HD enhancement completed." }
+       catch(e:Exception) { editStatus=e.message ?: "HD enhancement unavailable." }
+      } }, modifier=Modifier.weight(1f), enabled=generatedBitmap!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.AutoAwesome,null); Text("HD Enhance") }
+     }
+     OutlinedButton(onClick={ val request=lastGenerationRequest; if(request!=null) generationScope.launch {
+      try { generationState=GenerationUiState.Preparing("Generating four genuine variations…"); val results=generationCoordinator.generateVariants(request,4) { generationState=it }; variantBitmaps=results.map { it.image }; generatedBitmap=results.first().image; generationState=GenerationUiState.Success(results.first()); editStatus="Four variations generated." }
+      catch(e:Exception) { generationState=GenerationUiState.Failed(e.message ?: "Multiple preview unavailable.",e is ModelNotConfiguredException); editStatus=e.message ?: "Multiple preview unavailable." }
+     } }, modifier=Modifier.fillMaxWidth(), enabled=lastGenerationRequest!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.GridView,null); Text("Generate 2×2 variations") }
+     if(variantBitmaps.size==4) {
+      Text("FOUR GENERATED VARIATIONS",fontSize=11.sp,color=Color(0xFFC7A8FF),fontWeight=FontWeight.Bold)
+      Column(verticalArrangement=Arrangement.spacedBy(6.dp)) { variantBitmaps.chunked(2).forEach { row -> Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) { row.forEach { bitmap -> androidx.compose.foundation.Image(bitmap.asImageBitmap(),"Generated variation",Modifier.weight(1f).height(130.dp),contentScale=ContentScale.Crop) } } } }
+     }
+     OutlinedButton(onClick={ val uri=photoUri; if(uri!=null) generationScope.launch { try { originalCompareBitmap=V1ImageInput.decodeForInference(context,uri,1024) } catch(e:Exception) { editStatus=e.message ?: "Could not load original for comparison." } } },modifier=Modifier.fillMaxWidth()) { Text("Compare original and result") }
+     if(originalCompareBitmap!=null && generatedBitmap!=null) BeforeAfterCompare(originalCompareBitmap!!,generatedBitmap!!)
+    }
     DeviceReadinessCard(context, photoUri, cameraBitmap)
+    HardwareSetupCard(hardwarePlan)
+    ModelDownloadReadinessCard()
+    Text("PHOTO CONTEXT & STYLE SUGGESTIONS", fontSize=11.sp, color=Color(0xFFC7A8FF), fontWeight=FontWeight.Bold, modifier=Modifier.padding(top=12.dp))
+    OutlinedTextField(value=subjectDescription, onValueChange={ subjectDescription=it.take(160) }, modifier=Modifier.fillMaxWidth(), label={ Text("What is in your photo? (optional)") }, placeholder={ Text("e.g. portrait, dog, landscape, product") }, singleLine=true, shape=RoundedCornerShape(14.dp))
+    if (contextSuggestions.recommendations.isNotEmpty()) {
+     Text("Suggested from your description (not automatic image recognition)", fontSize=10.sp, color=Color.LightGray)
+     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement=Arrangement.spacedBy(6.dp)) {
+      contextSuggestions.recommendations.take(8).forEach { recommendation ->
+       AssistChip(onClick={
+        try {
+         val updated=MultiStyleSelection.toggle(selectedStyleIds.toList(), recommendation.id, effects)
+         selectedStyleIds.clear(); selectedStyleIds.addAll(updated)
+         editStatus=recommendation.title+" added from suggestions."
+        } catch (error: IllegalArgumentException) { editStatus=error.message ?: "Could not add suggestion." }
+       }, label={ Text(recommendation.title) })
+      }
+     }
+    }
+    V1CreativeControls(
+     styles = selectedStyles,
+     availableStyles = effects,
+     customPrompt = editDescription,
+     onPromptPreview = { plan -> editStatus = "Prompt prepared (${plan.combined.length} characters). Generate sends this prompt to the local engine." },
+     onIntensityChange = { generationIntensity = it.coerceIn(0, 100) },
+     onRoulette = { picks ->
+      selectedStyleIds.clear()
+      selectedStyleIds.addAll(picks.map { it.id })
+      editStatus = "Style roulette selected ${picks.size} compatible styles."
+     }
+    )
+    V1FeatureStatusPanel()
 
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
      Spacer(Modifier.weight(1f)); Text("${effects.size} styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
     }
     OutlinedTextField(value=catalogueSearch,onValueChange={catalogueSearch=it},modifier=Modifier.fillMaxWidth().padding(top=10.dp,bottom=8.dp),placeholder={Text("Search 275+ styles...")},leadingIcon={Icon(Icons.Rounded.Search,null)},singleLine=true,shape=RoundedCornerShape(14.dp))
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) { categories.forEach { c -> FilterChip(selected=selectedCategory==c,onClick={selectedCategory=c},label={Text(c)},shape=RoundedCornerShape(20.dp)) } }
-    if(selectedEffectTitles.isNotEmpty()) {
-     Text("SELECTED STYLES (${selectedEffectTitles.size})",fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp,modifier=Modifier.padding(bottom=6.dp))
-     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(6.dp)) { selectedEffectTitles.forEach { title -> AssistChip(onClick={selectedEffectTitles.remove(title)},label={Text(title)},leadingIcon={Icon(Icons.Rounded.CheckCircle,null)},trailingIcon={Icon(Icons.Rounded.Close,null)}) } }
+    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+     categories.forEach { category ->
+      val count = if (category == "All") effects.size else effects.count { it.category == category }
+      FilterChip(selected=selectedCategory==category,onClick={selectedCategory=category},label={Text("$category · $count")},shape=RoundedCornerShape(20.dp))
+     }
+    }
+    if(selectedStyles.isNotEmpty()) {
+     Row(Modifier.fillMaxWidth(), verticalAlignment=Alignment.CenterVertically) {
+      Text("SELECTED STYLES (${selectedStyles.size}/${MultiStyleSelection.MAX_STYLES})",fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp,modifier=Modifier.weight(1f))
+      TextButton(onClick={selectedStyleIds.clear(); editStatus="All selected styles cleared."}) { Text("Clear all") }
+     }
+     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(6.dp)) {
+      selectedStyles.forEach { style ->
+       AssistChip(onClick={selectedStyleIds.remove(style.id); editStatus=style.title+" removed from your edit."},label={Text(style.title)},leadingIcon={Icon(Icons.Rounded.CheckCircle,null)},trailingIcon={Icon(Icons.Rounded.Close,null)})
+      }
+     }
     }
     Text("Tap any style to add it to your edit. Select more than one.",fontSize=11.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(bottom=9.dp))
     shown.chunked(2).forEach { rowEffects ->
      Row(Modifier.fillMaxWidth().padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
       rowEffects.forEach { effect ->
-       val active = effect.title in selectedEffectTitles
-       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) { selectedEffectTitles.remove(effect.title); editStatus = effect.title + " removed from your edit." } else { selectedEffectTitles.add(effect.title); editStatus = effect.title + " added. " + selectedEffectTitles.size + " style(s) selected. Tap Generate to start your edit." } }.padding(10.dp)) {
+       val active = effect.id in selectedStyleIds
+       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable {
+        try {
+         val updated = MultiStyleSelection.toggle(selectedStyleIds.toList(), effect.id, effects)
+         selectedStyleIds.clear(); selectedStyleIds.addAll(updated)
+         editStatus = if(active) effect.title + " removed from your edit." else effect.title + " added. " + updated.size + " of " + MultiStyleSelection.MAX_STYLES + " styles selected."
+        } catch (error: IllegalArgumentException) {
+         editStatus = error.message ?: "This style cannot be selected."
+        }
+       }.padding(10.dp)) {
         Box(Modifier.fillMaxWidth().height(78.dp).clip(RoundedCornerShape(12.dp)).background(Brush.linearGradient(effect.colors))) {
          Icon(effect.icon,null,tint=Color.White,modifier=Modifier.align(Alignment.Center).size(34.dp))
          if(active) Icon(Icons.Rounded.CheckCircle,null,tint=Color.White,modifier=Modifier.align(Alignment.TopEnd).padding(5.dp))
@@ -266,6 +505,15 @@ fun AuraStudioApp() {
       enabled=generatedImageUri!=null,
       modifier=Modifier.fillMaxWidth()
      ) { Icon(Icons.Rounded.Share,null); Spacer(Modifier.width(7.dp)); Text("Share edited image") }
+    }
+
+    Spacer(Modifier.height(20.dp))
+    HorizontalDivider(color = Color(0xFF494052))
+    Column(Modifier.fillMaxWidth().padding(vertical = 18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+     Text("AURA STUDIO", fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp, color = Color(0xFFC7A8FF))
+     Text("Founder — Aura Studio, Aurix.Studio, UPSSSC Maths Pathshala", fontSize = 12.sp, color = Color(0xFFF7F1FF), fontWeight = FontWeight.SemiBold)
+     Text("Prayagraj, Uttar Pradesh, India", fontSize = 10.sp, color = Color(0xFFB9B0C7))
+     Text("© 2026 Anand Kaithwas. All rights reserved.", fontSize = 9.sp, color = Color(0xFF8F879A), modifier = Modifier.padding(top = 4.dp))
     }
 
    }
