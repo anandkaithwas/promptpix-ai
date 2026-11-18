@@ -324,7 +324,7 @@ fun AuraStudioApp() {
          editStatus = "Preparing local image generation…"
          generationScope.launch {
           generationState = GenerationUiState.Preparing()
-          generationState = generationCoordinator.generate(request)
+          generationState = generationCoordinator.generate(request) { generationState = it }
           editStatus = when (val state = generationState) {
            is GenerationUiState.Success -> {
             generatedBitmap = state.result.image
@@ -356,7 +356,7 @@ fun AuraStudioApp() {
      Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
       OutlinedButton(onClick={ generationScope.launch {
        generationState=GenerationUiState.Preparing("Creating another variation…")
-       generationState=generationCoordinator.shuffle()
+       generationState=generationCoordinator.shuffle { generationState=it }
        if(generationState is GenerationUiState.Success) { generatedBitmap=(generationState as GenerationUiState.Success).result.image; editStatus="New variation generated with a different seed." }
        else if(generationState is GenerationUiState.Failed) editStatus=(generationState as GenerationUiState.Failed).message
       } }, modifier=Modifier.weight(1f), enabled=lastGenerationRequest!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.Refresh,null); Text("Try again") }
@@ -367,7 +367,7 @@ fun AuraStudioApp() {
       } }, modifier=Modifier.weight(1f), enabled=generatedBitmap!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.HighQuality,null); Text("HD Enhance") }
      }
      OutlinedButton(onClick={ val request=lastGenerationRequest; if(request!=null) generationScope.launch {
-      try { generationState=GenerationUiState.Preparing("Generating four genuine variations…"); val results=generationCoordinator.generateVariants(request,4); variantBitmaps=results.map { it.image }; generatedBitmap=results.first().image; generationState=GenerationUiState.Success(results.first()); editStatus="Four variations generated." }
+      try { generationState=GenerationUiState.Preparing("Generating four genuine variations…"); val results=generationCoordinator.generateVariants(request,4) { generationState=it }; variantBitmaps=results.map { it.image }; generatedBitmap=results.first().image; generationState=GenerationUiState.Success(results.first()); editStatus="Four variations generated." }
       catch(e:Exception) { generationState=GenerationUiState.Failed(e.message ?: "Multiple preview unavailable.",e is ModelNotConfiguredException); editStatus=e.message ?: "Multiple preview unavailable." }
      } }, modifier=Modifier.fillMaxWidth(), enabled=lastGenerationRequest!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.GridView,null); Text("Generate 2×2 variations") }
      if(variantBitmaps.size==4) {
