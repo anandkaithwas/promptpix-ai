@@ -102,21 +102,27 @@ class ModelNotConfiguredException(message: String) : IllegalStateException(messa
 
 object V1StyleRecommender {
     fun recommend(labels: List<SubjectLabel>, styles: List<Effect>, limit: Int = 8): List<Effect> {
-        val terms = labels.sortedByDescending { it.confidence }.flatMap { label ->
-            when (label.label.lowercase()) {
-                "person", "face", "portrait" -> listOf("portrait","photography","lighting","camera","cinematic")
-                "dog", "cat", "animal", "pet" -> listOf("nature","photography","lighting","art")
-                "landscape", "mountain", "tree", "nature" -> listOf("nature","weather","photography","lighting")
-                "building", "architecture" -> listOf("architecture","photography","lighting","art")
-                else -> listOf(label.label.lowercase())
+        val normalized = labels.filter { it.confidence in 0f..1f && it.label.isNotBlank() }
+            .sortedByDescending { it.confidence }
+        if (normalized.isEmpty()) return emptyList()
+        val scored = styles.map { style ->
+            val score = normalized.sumOf { label ->
+                val terms = when (label.label.lowercase()) {
+                    "person", "face", "portrait", "human" -> listOf("portrait","photography","lighting","camera","cinematic","face")
+                    "dog", "cat", "animal", "pet" -> listOf("nature","photography","lighting","art","animal")
+                    "landscape", "mountain", "tree", "nature", "plant" -> listOf("nature","weather","photography","lighting","landscape")
+                    "building", "architecture" -> listOf("architecture","photography","lighting","art","building")
+                    "food", "dish", "meal" -> listOf("food","macro","photography","lighting","colour")
+                    else -> listOf(label.label.lowercase())
+                }
+                val haystack = "${style.title} ${style.category} ${style.instruction}".lowercase()
+                if (terms.any { it in haystack }) label.confidence.toDouble() else 0.0
             }
-        }.distinct()
-        return styles.filter { style ->
-            terms.any { term ->
-                style.category.contains(term, true) || style.title.contains(term, true) ||
-                    style.instruction.contains(term, true)
-            }
-        }.distinctBy { it.id }.take(limit.coerceAtLeast(1))
+            style to score
+        }
+        return scored.filter { it.second > 0.0 }
+            .sortedWith(compareByDescending<Pair<Effect, Double>> { it.second }.thenBy { it.first.title })
+            .take(limit.coerceIn(1, 20)).map { it.first }
     }
 }
 
@@ -304,5 +310,45 @@ object V1MeasuredModelSelector {
             .filter { it.peakMemoryMb < profile.availableRamMb * 0.65 }
             .filter { it.profile.ordinal <= hardware.inferenceProfile.ordinal && it.profile != InferenceProfile.UNSUPPORTED }
             .minByOrNull { it.latencyMillis }
+    }
+}
+
+
+object PromptIntentInterpreter {
+    fun classify(request: String): PromptIntent {
+        val q = request.lowercase()
+        return when {
+            listOf("portrait","face","headshot","person").any { it in q } -> PromptIntent.PORTRAIT
+            listOf("landscape","mountain","forest","sea","sunset").any { it in q } -> PromptIntent.LANDSCAPE
+            listOf("product","bottle","shoe","watch","packaging").any { it in q } -> PromptIntent.PRODUCT
+            listOf("background","replace the background","new background").any { it in q } -> PromptIntent.BACKGROUND
+            listOf("lighting","brighter","darker","golden hour","neon").any { it in q } -> PromptIntent.LIGHTING
+            listOf("style","anime","watercolor","oil painting","cinematic").any { it in q } -> PromptIntent.STYLE_TRANSFER
+            else -> PromptIntent.GENERAL
+        }
+    }
+}
+
+data class ContextSuggestionResult(
+    val labels: List<SubjectLabel>,
+    val recommendations: List<Effect>,
+    val source: String
+)
+
+class V1ContextSuggestionService(private val labeler: OfflineImageLabeler) {
+    suspend fun suggest(bitmap: Bitmap, styles: List<Effect>): ContextSuggestionResult {
+        val labels = labeler.classify(bitmap)
+            .filter { it.label.isNotBlank() && it.confidence in 0f..1f }
+            .sortedByDescending { it.confidence }
+        return ContextSuggestionResult(labels, V1StyleRecommender.recommend(labels, styles), "offline-model")
+    }
+
+    fun suggestFromUserDescription(description: String, styles: List<Effect>): ContextSuggestionResult {
+        val labels = description.split(',', ';')
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .distinct()
+            .map { SubjectLabel(it, 0.65f) }
+        return ContextSuggestionResult(labels, V1StyleRecommender.recommend(labels, styles), "user-description")
     }
 }
