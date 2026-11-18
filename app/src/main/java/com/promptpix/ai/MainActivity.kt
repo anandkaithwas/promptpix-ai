@@ -97,10 +97,12 @@ private fun colorsForCategory(category: String): List<Color> = when {
 private fun loadEffects(context: android.content.Context): List<Effect> {
  val root = org.json.JSONObject(context.assets.open("catalogue/styles.json").bufferedReader().use { it.readText() })
  val array = root.getJSONArray("styles")
- return (0 until array.length()).map { i ->
+ val loaded = (0 until array.length()).map { i ->
   val item = array.getJSONObject(i); val category = item.getString("category")
   Effect(item.getString("id"),item.getString("name"),category,iconForStyle(item.getString("name"),category),colorsForCategory(category),category.uppercase(),"/"+item.getString("id"),item.getString("instruction"))
  }
+ StyleCatalogueValidator.validate(loaded)
+ loaded
 }
 private val ink = Color(0xFF171323)
 
