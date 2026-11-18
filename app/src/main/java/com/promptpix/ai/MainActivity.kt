@@ -156,6 +156,9 @@ fun AuraStudioApp() {
  var generationState by remember { mutableStateOf<GenerationUiState>(GenerationUiState.Idle) }
  var generationIntensity by remember { mutableIntStateOf(50) }
  var generatedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+ var originalCompareBitmap by remember { mutableStateOf<Bitmap?>(null) }
+ var lastGenerationRequest by remember { mutableStateOf<GenerationRequest?>(null) }
+ var variantBitmaps by remember { mutableStateOf<List<Bitmap>>(emptyList()) }
  val generationScope = rememberCoroutineScope()
  val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
@@ -316,6 +319,8 @@ fun AuraStudioApp() {
          )
          generatedImageUri = null
          generatedBitmap = null
+         variantBitmaps = emptyList()
+         lastGenerationRequest = request
          editStatus = "Preparing local image generation…"
          generationScope.launch {
           generationState = GenerationUiState.Preparing()
@@ -346,6 +351,31 @@ fun AuraStudioApp() {
     generatedBitmap?.let { result ->
      Text("GENERATED RESULT", color=Color(0xFFC7A8FF), fontSize=11.sp, fontWeight=FontWeight.Bold)
      androidx.compose.foundation.Image(result.asImageBitmap(), "Generated image", Modifier.fillMaxWidth().height(240.dp), contentScale=ContentScale.Fit)
+    }
+    if (generatedBitmap != null && photoUri != null) {
+     Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+      OutlinedButton(onClick={ generationScope.launch {
+       generationState=GenerationUiState.Preparing("Creating another variation…")
+       generationState=generationCoordinator.shuffle()
+       if(generationState is GenerationUiState.Success) { generatedBitmap=(generationState as GenerationUiState.Success).result.image; editStatus="New variation generated with a different seed." }
+       else if(generationState is GenerationUiState.Failed) editStatus=(generationState as GenerationUiState.Failed).message
+      } }, modifier=Modifier.weight(1f), enabled=lastGenerationRequest!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.Refresh,null); Text("Try again") }
+      OutlinedButton(onClick={ val current=generatedBitmap; if(current!=null) generationScope.launch {
+       generationState=GenerationUiState.Preparing("Enhancing resolution…")
+       try { val enhanced=generationCoordinator.enhanceHd(current); generatedBitmap=enhanced; generationState=GenerationUiState.Success(GenerationResult(enhanced,lastGenerationRequest?.seed ?: 0L,enhanced.width,enhanced.height)); editStatus="HD enhancement completed." }
+       catch(e:Exception) { editStatus=e.message ?: "HD enhancement unavailable." }
+      } }, modifier=Modifier.weight(1f), enabled=generatedBitmap!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.HighQuality,null); Text("HD Enhance") }
+     }
+     OutlinedButton(onClick={ val request=lastGenerationRequest; if(request!=null) generationScope.launch {
+      try { generationState=GenerationUiState.Preparing("Generating four genuine variations…"); val results=generationCoordinator.generateVariants(request,4); variantBitmaps=results.map { it.image }; generatedBitmap=results.first().image; generationState=GenerationUiState.Success(results.first()); editStatus="Four variations generated." }
+      catch(e:Exception) { generationState=GenerationUiState.Failed(e.message ?: "Multiple preview unavailable.",e is ModelNotConfiguredException); editStatus=e.message ?: "Multiple preview unavailable." }
+     } }, modifier=Modifier.fillMaxWidth(), enabled=lastGenerationRequest!=null && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running) { Icon(Icons.Rounded.GridView,null); Text("Generate 2×2 variations") }
+     if(variantBitmaps.size==4) {
+      Text("FOUR GENERATED VARIATIONS",fontSize=11.sp,color=Color(0xFFC7A8FF),fontWeight=FontWeight.Bold)
+      Column(verticalArrangement=Arrangement.spacedBy(6.dp)) { variantBitmaps.chunked(2).forEach { row -> Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) { row.forEach { bitmap -> androidx.compose.foundation.Image(bitmap.asImageBitmap(),"Generated variation",Modifier.weight(1f).height(130.dp),contentScale=ContentScale.Crop) } } } }
+     }
+     OutlinedButton(onClick={ val uri=photoUri; if(uri!=null) generationScope.launch { try { originalCompareBitmap=V1ImageInput.decodeForInference(context,uri,1024) } catch(e:Exception) { editStatus=e.message ?: "Could not load original for comparison." } } },modifier=Modifier.fillMaxWidth()) { Text("Compare original and result") }
+     if(originalCompareBitmap!=null && generatedBitmap!=null) BeforeAfterCompare(originalCompareBitmap!!,generatedBitmap!!)
     }
     DeviceReadinessCard(context, photoUri, cameraBitmap)
     HardwareSetupCard(hardwarePlan)
