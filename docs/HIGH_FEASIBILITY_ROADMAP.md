@@ -2,6 +2,16 @@
 
 This document records the approved scope for the next product increment. Existing app behavior, the 275+ style catalogue, Android API 26 minimum, privacy commitments and direct Generate flow must be preserved.
 
+## First-release implementation scaffold
+
+Initial Kotlin foundations for all 33 V1.0 feature entries are tracked in:
+- `app/src/main/java/com/promptpix/ai/V1FeatureFoundation.kt` — 33-entry feature registry, prompt interpreter, local image-labeler contract, style recommender, device profile, adaptive profile selector, generation/upscaling interfaces, shuffle plan and model-asset contract.
+- `app/src/main/java/com/promptpix/ai/V1FeatureUi.kt` — creative controls, prompt preview, style roulette action, before/after comparison and feature status panel.
+- `app/src/test/java/com/promptpix/ai/V1FeatureFoundationTest.kt` — initial unit tests.
+- Existing `MainActivity.kt` now hosts the creative controls and V1 feature status panel.
+
+These are initial scaffolds. Inference, image recognition and upscaling adapters deliberately fail closed until real local model/runtime implementations are installed. The feature registry makes all 33 entries visible with honest implementation states.
+
 ## Approved immediate scope
 
 | Feature | Planned implementation | Current status / gate |
