@@ -50,16 +50,16 @@ object V1FeatureRegistry {
         V1Feature("hd_enhance","HD Enhance","Generation","Upscale a real generated image with a local super-resolution model.",V1FeatureState.MODEL_REQUIRED),
         V1Feature("before_after","Before/After Comparison","Generation","Compare original and generated images with a draggable divider.",V1FeatureState.EXISTING),
         V1Feature("contact_sheet","Multiple Style Preview","Generation","Show a 2×2 grid of genuine generated variations on capable devices.",V1FeatureState.INTEGRATION_REQUIRED),
-        V1Feature("save_image","Save Generated Image","Image Management","Save a generated image to the user's media collection.",V1FeatureState.SCAFFOLDED),
-        V1Feature("share_image","Share Generated Image","Image Management","Share a generated image through Android Sharesheet.",V1FeatureState.SCAFFOLDED),
-        V1Feature("result_preview","Result Preview","Image Management","Display the actual generated image returned by the engine.",V1FeatureState.INTEGRATION_REQUIRED),
-        V1Feature("preserve_original","Original Preservation","Image Management","Keep the source image immutable and save outputs separately.",V1FeatureState.SCAFFOLDED),
+        V1Feature("save_image","Save Generated Image","Image Management","Save a generated image to the user's media collection.",V1FeatureState.EXISTING),
+        V1Feature("share_image","Share Generated Image","Image Management","Share a generated image through Android Sharesheet.",V1FeatureState.EXISTING),
+        V1Feature("result_preview","Result Preview","Image Management","Display the actual generated image returned by the engine.",V1FeatureState.EXISTING),
+        V1Feature("preserve_original","Original Preservation","Image Management","Keep the source image immutable and save outputs separately.",V1FeatureState.EXISTING),
         V1Feature("android_compatibility","Android Compatibility","Device & Performance","Declare and enforce Android API 26 as the minimum OS.",V1FeatureState.EXISTING),
         V1Feature("ram_detection","RAM Detection","Device & Performance","Read total and available device memory.",V1FeatureState.EXISTING),
         V1Feature("cpu_abi","CPU/ABI Detection","Device & Performance","Inspect supported ABI and processor count.",V1FeatureState.EXISTING),
         V1Feature("low_memory","Low-Memory Processing","Device & Performance","Decode and resize photos using bounded memory.",V1FeatureState.EXISTING),
         V1Feature("model_download","AI Model Download","Device & Performance","Download optional model assets with size and licence disclosure.",V1FeatureState.INTEGRATION_REQUIRED),
-        V1Feature("inference_benchmark","Inference Benchmarking","Device & Performance","Measure actual model latency and memory before enabling profiles.",V1FeatureState.MODEL_REQUIRED)
+        V1Feature("inference_benchmark","Inference Benchmarking","Device & Performance","Measure actual model latency and memory before enabling profiles.",V1FeatureState.INTEGRATION_REQUIRED)
     )
 
     init { check(all.size == 33) { "V1.0 feature registry must contain exactly 33 entries." } }
