@@ -74,3 +74,11 @@ They are roadmap commitments, not implemented features. Their controls must not 
 6. Add actual progress, result comparison, save and share.
 
 Do not claim that Aura Studio generates images until an actual model returns a transformed image.
+
+## Ownership and project protection
+
+Aura Studio was founded by **Anand Kaithwas**, Prayagraj, Uttar Pradesh, India.
+
+Copyright © 2026 Anand Kaithwas. All rights reserved. This repository and the original Aura Studio code and materials are proprietary; no reuse or redistribution permission is granted by default. See [LICENSE](LICENSE) and [NOTICE](NOTICE). Third-party dependencies and assets remain governed by their own licences.
+
+Release builds enable R8 code shrinking, optimisation and obfuscation. This raises the cost of casual reverse engineering but cannot make an APK impossible to inspect or copy. Keep the source repository private and do not embed secrets in the client.
