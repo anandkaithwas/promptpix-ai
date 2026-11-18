@@ -153,6 +153,7 @@ fun AuraStudioApp() {
  val context = LocalContext.current
  var editDescription by remember { mutableStateOf("") }
  var generationState by remember { mutableStateOf<GenerationUiState>(GenerationUiState.Idle) }
+ var generationIntensity by remember { mutableIntStateOf(50) }
  var generatedBitmap by remember { mutableStateOf<Bitmap?>(null) }
  val generationScope = rememberCoroutineScope()
  val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
@@ -300,7 +301,7 @@ fun AuraStudioApp() {
           source = source,
           prompt = prompt,
           selectedStyleIds = selectedStyles.map { it.id },
-          intensity = 50,
+          intensity = generationIntensity,
           seed = kotlin.random.Random.nextLong(),
           requestedWidth = 512,
           requestedHeight = 512
@@ -345,6 +346,7 @@ fun AuraStudioApp() {
      availableStyles = effects,
      customPrompt = editDescription,
      onPromptPreview = { plan -> editStatus = "Prompt prepared (${plan.combined.length} characters). Generate sends this prompt to the local engine." },
+     onIntensityChange = { generationIntensity = it.coerceIn(0, 100) },
      onRoulette = { picks ->
       selectedStyleIds.clear()
       selectedStyleIds.addAll(picks.map { it.id })
