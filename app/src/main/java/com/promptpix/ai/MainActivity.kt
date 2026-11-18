@@ -154,7 +154,16 @@ fun AuraStudioApp() {
  var catalogueSearch by remember { mutableStateOf("") }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
- val gallery = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { photoUri = it; cameraBitmap = null }
+ // Prefer Android Photo Picker (no broad media permission); the contract supplies
+ // a compatible fallback on older devices, including API 26–32.
+ val gallery = rememberLauncherForActivityResult(
+  ActivityResultContracts.PickVisualMedia()
+ ) { uri ->
+  photoUri = uri
+  cameraBitmap = null
+  generatedImageUri = null
+  editStatus = if (uri != null) "Photo selected. Your original remains unchanged." else "No photo selected."
+ }
  val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { cameraBitmap = it; photoUri = null }
  val effects = remember { loadEffects(context) }
  val categories = listOf("All") + effects.map { it.category }.distinct()
