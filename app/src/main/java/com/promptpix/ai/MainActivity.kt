@@ -155,7 +155,7 @@ fun AuraStudioApp() {
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
  var selectedCategory by remember { mutableStateOf("All") }
- var selectedEffectTitles = remember { mutableStateListOf<String>() }
+ var selectedStyleIds = remember { mutableStateListOf<String>() }
  var catalogueSearch by remember { mutableStateOf("") }
  var photoUri by remember { mutableStateOf<Uri?>(null) }
  var cameraBitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -187,7 +187,8 @@ fun AuraStudioApp() {
  val effects = remember { loadEffects(context) }
  val categories = listOf("All") + effects.map { it.category }.distinct()
  val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && StyleCatalogueSearch.matches(it, catalogueSearch) }
- val selectedEffect = effects.firstOrNull { it.title in selectedEffectTitles } ?: effects.first()
+ val selectedStyles = MultiStyleSelection.resolve(selectedStyleIds, effects)
+ val selectedEffect = selectedStyles.firstOrNull() ?: effects.first()
  MaterialTheme(colorScheme = darkColorScheme(
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
   background = ink, surface = Color(0xFF241F32), onSurface = Color(0xFFF7F1FF)
@@ -286,20 +287,20 @@ fun AuraStudioApp() {
       generatedImageUri = null
       editStatus = "AI generation is not connected yet. The selected photo and edit instructions are ready, but an image model must be integrated before an edited image can be produced."
      },
-     enabled=(photoUri!=null || cameraBitmap!=null) && (editDescription.isNotBlank() || selectedEffectTitles.isNotEmpty()),
+     enabled=(photoUri!=null || cameraBitmap!=null) && (editDescription.isNotBlank() || selectedStyleIds.isNotEmpty()),
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Generate") }
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     DeviceReadinessCard(context, photoUri, cameraBitmap)
     V1CreativeControls(
-     styles = effects.filter { it.title in selectedEffectTitles },
+     styles = selectedStyles,
      availableStyles = effects,
      customPrompt = editDescription,
      onPromptPreview = { editStatus = "Prompt interpretation prepared locally. Actual generation still requires the local inference engine." },
      onRoulette = { picks ->
-      selectedEffectTitles.clear()
-      selectedEffectTitles.addAll(picks.map { it.title })
+      selectedStyleIds.clear()
+      selectedStyleIds.addAll(picks.map { it.id })
       editStatus = "Style roulette selected ${picks.size} compatible styles."
      }
     )
@@ -316,16 +317,31 @@ fun AuraStudioApp() {
       FilterChip(selected=selectedCategory==category,onClick={selectedCategory=category},label={Text("$category · $count")},shape=RoundedCornerShape(20.dp))
      }
     }
-    if(selectedEffectTitles.isNotEmpty()) {
-     Text("SELECTED STYLES (${selectedEffectTitles.size})",fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp,modifier=Modifier.padding(bottom=6.dp))
-     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(6.dp)) { selectedEffectTitles.forEach { title -> AssistChip(onClick={selectedEffectTitles.remove(title)},label={Text(title)},leadingIcon={Icon(Icons.Rounded.CheckCircle,null)},trailingIcon={Icon(Icons.Rounded.Close,null)}) } }
+    if(selectedStyles.isNotEmpty()) {
+     Row(Modifier.fillMaxWidth(), verticalAlignment=Alignment.CenterVertically) {
+      Text("SELECTED STYLES (${selectedStyles.size}/${MultiStyleSelection.MAX_STYLES})",fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp,modifier=Modifier.weight(1f))
+      TextButton(onClick={selectedStyleIds.clear(); editStatus="All selected styles cleared."}) { Text("Clear all") }
+     }
+     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(6.dp)) {
+      selectedStyles.forEach { style ->
+       AssistChip(onClick={selectedStyleIds.remove(style.id); editStatus=style.title+" removed from your edit."},label={Text(style.title)},leadingIcon={Icon(Icons.Rounded.CheckCircle,null)},trailingIcon={Icon(Icons.Rounded.Close,null)})
+      }
+     }
     }
     Text("Tap any style to add it to your edit. Select more than one.",fontSize=11.sp,color=Color(0xFFB9B0C7),modifier=Modifier.padding(bottom=9.dp))
     shown.chunked(2).forEach { rowEffects ->
      Row(Modifier.fillMaxWidth().padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
       rowEffects.forEach { effect ->
-       val active = effect.title in selectedEffectTitles
-       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable { if(active) { selectedEffectTitles.remove(effect.title); editStatus = effect.title + " removed from your edit." } else { selectedEffectTitles.add(effect.title); editStatus = effect.title + " added. " + selectedEffectTitles.size + " style(s) selected. Tap Generate to start your edit." } }.padding(10.dp)) {
+       val active = effect.id in selectedStyleIds
+       Column(Modifier.weight(1f).clip(RoundedCornerShape(17.dp)).background(if(active) Color(0xFF493563) else Color(0xFF272132)).clickable {
+        try {
+         val updated = MultiStyleSelection.toggle(selectedStyleIds.toList(), effect.id, effects)
+         selectedStyleIds.clear(); selectedStyleIds.addAll(updated)
+         editStatus = if(active) effect.title + " removed from your edit." else effect.title + " added. " + updated.size + " of " + MultiStyleSelection.MAX_STYLES + " styles selected."
+        } catch (error: IllegalArgumentException) {
+         editStatus = error.message ?: "This style cannot be selected."
+        }
+       }.padding(10.dp)) {
         Box(Modifier.fillMaxWidth().height(78.dp).clip(RoundedCornerShape(12.dp)).background(Brush.linearGradient(effect.colors))) {
          Icon(effect.icon,null,tint=Color.White,modifier=Modifier.align(Alignment.Center).size(34.dp))
          if(active) Icon(Icons.Rounded.CheckCircle,null,tint=Color.White,modifier=Modifier.align(Alignment.TopEnd).padding(5.dp))
