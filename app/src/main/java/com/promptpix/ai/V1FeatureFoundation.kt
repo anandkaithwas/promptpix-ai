@@ -37,11 +37,11 @@ object V1FeatureRegistry {
         V1Feature("custom_instructions","Custom Instructions","Core","Describe requested changes in natural language.",V1FeatureState.EXISTING),
         V1Feature("direct_generate","Direct Generate","Core","Start generation from the main action without a mandatory review screen.",V1FeatureState.INTEGRATION_REQUIRED),
         V1Feature("prompt_interpreter","AI Prompt Interpreter","Core","Combine selected style instructions, custom instructions and preservation guidance.",V1FeatureState.EXISTING),
-        V1Feature("prompt_enhancer","Automatic Prompt Enhancer","AI Intelligence","Enrich a short request with preservation and quality constraints.",V1FeatureState.SCAFFOLDED),
+        V1Feature("prompt_enhancer","Automatic Prompt Enhancer","AI Intelligence","Enrich a short request with explicit scene, lighting, preservation and quality guidance.",V1FeatureState.EXISTING),
         V1Feature("context_suggestions","Context-Aware Suggestions","AI Intelligence","Use on-device image labels to infer image subject.",V1FeatureState.MODEL_REQUIRED),
-        V1Feature("style_recommendations","Smart Style Recommendations","AI Intelligence","Rank catalogue styles against detected subject labels.",V1FeatureState.SCAFFOLDED),
-        V1Feature("hardware_setup","Auto-Hardware Setup","AI Intelligence","Inspect runtime memory and supported device capabilities.",V1FeatureState.SCAFFOLDED),
-        V1Feature("adaptive_model","Adaptive Model Selection","AI Intelligence","Choose a model profile only from verified runtime benchmarks.",V1FeatureState.MODEL_REQUIRED),
+        V1Feature("style_recommendations","Smart Style Recommendations","AI Intelligence","Rank catalogue styles against supplied or detected subject labels.",V1FeatureState.EXISTING),
+        V1Feature("hardware_setup","Auto-Hardware Setup","AI Intelligence","Inspect runtime memory, ABI and CPU and produce a conservative execution plan.",V1FeatureState.EXISTING),
+        V1Feature("adaptive_model","Adaptive Model Selection","AI Intelligence","Select only compatible model profiles backed by measured device benchmarks.",V1FeatureState.INTEGRATION_REQUIRED),
         V1Feature("local_generation","Local AI Generation","Generation","Run genuine image-to-image inference on the device.",V1FeatureState.MODEL_REQUIRED),
         V1Feature("generation_progress","Generation Progress","Generation","Report real inference progress from engine callbacks.",V1FeatureState.INTEGRATION_REQUIRED),
         V1Feature("shuffle_look","Shuffle Look","Generation","Repeat the same edit with a new random seed.",V1FeatureState.SCAFFOLDED),
@@ -248,5 +248,61 @@ object StyleCatalogueSearch {
             style.category.contains(term, ignoreCase = true) ||
             style.instruction.contains(term, ignoreCase = true) ||
             style.id.contains(term, ignoreCase = true)
+    }
+}
+
+
+/** Hardware-aware execution advice. This is preflight, not a performance guarantee. */
+data class HardwareExecutionPlan(
+    val profile: DeviceProfile,
+    val inferenceProfile: InferenceProfile,
+    val maxInputEdge: Int,
+    val allowGpuDelegate: Boolean,
+    val explanation: String
+)
+
+object V1HardwareSetup {
+    fun plan(profile: DeviceProfile): HardwareExecutionPlan {
+        val suggested = V1AdaptiveModelSelector.suggest(profile)
+        val maxEdge = when (suggested) {
+            InferenceProfile.UNSUPPORTED -> 0
+            InferenceProfile.LOW_MEMORY -> 256
+            InferenceProfile.BALANCED -> 384
+            InferenceProfile.HIGH_CAPABILITY -> 512
+        }
+        val abiSupportsArm = profile.supportedAbis.any { it.startsWith("arm64-v8a") || it.startsWith("armeabi-v7a") }
+        val gpuEligible = suggested != InferenceProfile.UNSUPPORTED && abiSupportsArm
+        val explanation = when {
+            suggested == InferenceProfile.UNSUPPORTED -> "Insufficient available memory or unsupported Android version; inference disabled."
+            profile.availableRamMb < 1500 -> "Low-memory mode: small input and conservative processing."
+            else -> "Hardware preflight complete. Runtime benchmarking is still required before selecting an optimized delegate."
+        }
+        return HardwareExecutionPlan(profile, suggested, maxEdge, gpuEligible, explanation)
+    }
+}
+
+data class InferenceBenchmark(
+    val modelId: String,
+    val profile: InferenceProfile,
+    val latencyMillis: Long,
+    val peakMemoryMb: Long,
+    val succeeded: Boolean,
+    val deviceFingerprint: String
+)
+
+object V1MeasuredModelSelector {
+    fun select(
+        profile: DeviceProfile,
+        benchmarks: List<InferenceBenchmark>,
+        installedModelIds: Set<String>
+    ): InferenceBenchmark? {
+        val hardware = V1HardwareSetup.plan(profile)
+        if (hardware.inferenceProfile == InferenceProfile.UNSUPPORTED) return null
+        return benchmarks.asSequence()
+            .filter { it.succeeded && it.modelId in installedModelIds }
+            .filter { it.deviceFingerprint.isNotBlank() && it.latencyMillis > 0 && it.peakMemoryMb > 0 }
+            .filter { it.peakMemoryMb < profile.availableRamMb * 0.65 }
+            .filter { it.profile.ordinal <= hardware.inferenceProfile.ordinal && it.profile != InferenceProfile.UNSUPPORTED }
+            .minByOrNull { it.latencyMillis }
     }
 }
