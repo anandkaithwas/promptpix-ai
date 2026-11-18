@@ -15,10 +15,10 @@ class GenerationOrchestrationTest {
     @Test fun generationProgressIsClampedAndInvalidValuesAreIgnored() {
         val values = listOf(-0.2f, 0.4f, 1.5f, Float.NaN)
         val normalized = values.map { raw -> raw.takeIf { it.isFinite() }?.coerceIn(0f, 1f) }
-        assertEquals(0f, normalized[0])
-        assertEquals(0.4f, normalized[1])
-        assertEquals(1f, normalized[2])
-        assertEquals(null, normalized[3])
+        assertEquals(0f, normalized[0]!!, 0.0001f)
+        assertEquals(0.4f, normalized[1]!!, 0.0001f)
+        assertEquals(1f, normalized[2]!!, 0.0001f)
+        org.junit.Assert.assertNull(normalized[3])
     }
 
     @Test fun registryKeepsRealModelDependenciesExplicit() {
