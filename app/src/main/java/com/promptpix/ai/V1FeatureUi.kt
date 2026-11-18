@@ -141,3 +141,16 @@ fun HardwareSetupCard(plan: HardwareExecutionPlan, modifier: Modifier = Modifier
         }
     }
 }
+
+
+@Composable
+fun ModelDownloadReadinessCard(modifier: Modifier = Modifier) {
+    Card(modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF211D2C)), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text("OPTIONAL AI MODEL DOWNLOAD", color = Color(0xFFC7A8FF), fontSize = 11.sp)
+            Text("No model is currently offered for installation.", style = MaterialTheme.typography.titleSmall)
+            Text("Downloads will remain disabled until an exact artifact URL, byte size, SHA-256 checksum, licence and verified tensor/runtime contract are published. Models are never downloaded automatically.", fontSize = 11.sp, color = Color.LightGray)
+            Text("When enabled, installation will require your explicit choice and unmetered Wi-Fi, and files will stay in app-private storage.", fontSize = 10.sp, color = Color(0xFFFFD18A))
+        }
+    }
+}
