@@ -31,6 +31,7 @@ fun V1CreativeControls(
     customPrompt: String,
     onPromptPreview: (PromptBundle) -> Unit,
     onRoulette: (List<Effect>) -> Unit,
+    onIntensityChange: (Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var intensity by remember { mutableFloatStateOf(50f) }
@@ -43,7 +44,7 @@ fun V1CreativeControls(
                 Text("CREATIVE ASSIST", style = MaterialTheme.typography.titleMedium)
             }
             Text("Transformation intensity", fontSize = 12.sp)
-            Slider(value = intensity, onValueChange = { intensity = it }, valueRange = 0f..100f)
+            Slider(value = intensity, onValueChange = { intensity = it; onIntensityChange(it.toInt()) }, valueRange = 0f..100f)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text("Subtle", fontSize = 10.sp, color = Color.LightGray)
                 Text("${intensity.toInt()} / 100", fontSize = 11.sp, color = Color(0xFFC7A8FF))
