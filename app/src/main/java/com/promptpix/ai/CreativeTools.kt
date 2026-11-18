@@ -28,9 +28,18 @@ object PromptEnhancer {
             .distinct()
             .joinToString(". ")
 
+        val q = request.lowercase()
+        val guidance = when {
+            listOf("portrait", "face", "headshot").any { it in q } -> "Prioritise natural skin texture, realistic facial proportions and believable portrait lighting."
+            listOf("landscape", "mountain", "forest", "sea").any { it in q } -> "Maintain perspective, atmospheric depth and natural environmental detail."
+            listOf("product", "packaging", "bottle", "watch").any { it in q } -> "Preserve product geometry, material accuracy and clean commercial presentation."
+            listOf("background", "replace").any { it in q } -> "Keep subject edges clean and match perspective, lighting and shadows to the new environment."
+            else -> "Maintain coherent composition, perspective, lighting and subject geometry."
+        }
         val prompt = buildList {
             if (request.isNotEmpty()) add("User's requested edit: $request")
             if (styleText.isNotEmpty()) add("Selected visual style instructions: $styleText")
+            add(guidance)
             add("Create a coherent image-to-image transformation based on the supplied source photograph.")
             add("Keep composition and subject details consistent unless the user explicitly requests a change.")
         }.joinToString("\n")
@@ -42,7 +51,7 @@ object PromptEnhancer {
             } else {
                 "Preserve important source-photo details unless the requested edit requires changing them."
             },
-            qualityInstruction = "Use coherent lighting, natural textures, clean edges and sharp subject detail; avoid unintended artifacts."
+            qualityInstruction = "Use coherent lighting, natural textures, clean edges, accurate perspective, consistent shadows and sharp subject detail; avoid artifacts, distortions, extra limbs, text glitches and unintended changes."
         )
     }
 }
