@@ -126,3 +126,18 @@ fun V1FeatureStatusPanel(modifier: Modifier = Modifier) {
         }
     }
 }
+
+@Composable
+fun HardwareSetupCard(plan: HardwareExecutionPlan, modifier: Modifier = Modifier) {
+    Card(modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF211D2C)), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text("DEVICE AUTO-SETUP", color = Color(0xFFC7A8FF), fontSize = 11.sp)
+            Text("${plan.profile.apiLevel} • ${plan.profile.totalRamMb} MB RAM • ${plan.profile.cpuCores} CPU cores", fontSize = 12.sp)
+            Text("ABI: ${plan.profile.supportedAbis.firstOrNull() ?: "Unknown"}", fontSize = 11.sp, color = Color.LightGray)
+            Text("Profile: ${plan.inferenceProfile.name.replace('_', ' ')}", fontSize = 11.sp)
+            Text(if (plan.maxInputEdge > 0) "Suggested input limit: ${plan.maxInputEdge}px" else "Inference unavailable", fontSize = 11.sp)
+            Text(plan.explanation, fontSize = 10.sp, color = Color(0xFFFFD18A))
+            Text(if (plan.allowGpuDelegate) "GPU delegate may be tested; CPU fallback remains required." else "GPU delegate not recommended by preflight.", fontSize = 10.sp, color = Color.LightGray)
+        }
+    }
+}
