@@ -36,7 +36,7 @@ object V1FeatureRegistry {
         V1Feature("multi_style","Multi-Style Selection","Core","Combine selected compatible style instructions.",V1FeatureState.EXISTING),
         V1Feature("custom_instructions","Custom Instructions","Core","Describe requested changes in natural language.",V1FeatureState.EXISTING),
         V1Feature("direct_generate","Direct Generate","Core","Start generation from the main action without a mandatory review screen.",V1FeatureState.INTEGRATION_REQUIRED),
-        V1Feature("prompt_interpreter","AI Prompt Interpreter","Core","Combine selected style instructions and custom instructions.",V1FeatureState.SCAFFOLDED),
+        V1Feature("prompt_interpreter","AI Prompt Interpreter","Core","Combine selected style instructions, custom instructions and preservation guidance.",V1FeatureState.EXISTING),
         V1Feature("prompt_enhancer","Automatic Prompt Enhancer","AI Intelligence","Enrich a short request with preservation and quality constraints.",V1FeatureState.SCAFFOLDED),
         V1Feature("context_suggestions","Context-Aware Suggestions","AI Intelligence","Use on-device image labels to infer image subject.",V1FeatureState.MODEL_REQUIRED),
         V1Feature("style_recommendations","Smart Style Recommendations","AI Intelligence","Rank catalogue styles against detected subject labels.",V1FeatureState.SCAFFOLDED),
