@@ -25,18 +25,18 @@ class V1GenerationCoordinator(
 
     private var lastRequest: GenerationRequest? = null
 
-    suspend fun generate(request: GenerationRequest): GenerationUiState {
+    suspend fun generate(request: GenerationRequest, onState: (GenerationUiState) -> Unit = {}): GenerationUiState {
         lastRequest = request
-        return run(request)
+        return run(request, onState)
     }
 
-    suspend fun generateVariants(request: GenerationRequest, count: Int = 4): List<GenerationResult> {
+    suspend fun generateVariants(request: GenerationRequest, count: Int = 4, onState: (GenerationUiState) -> Unit = {}): List<GenerationResult> {
         require(count in 1..4) { "Variant count must be between one and four." }
         lastRequest = request
         val outputs = mutableListOf<GenerationResult>()
         repeat(count) { index ->
             val seed = if (index == 0) request.seed else V1Shuffle.nextSeed(outputs.last().seed).seed
-            when (val outcome = run(request.copy(seed = seed))) {
+            when (val outcome = run(request.copy(seed = seed), onState)) {
                 is GenerationUiState.Success -> outputs += outcome.result
                 is GenerationUiState.Failed -> throw IllegalStateException(outcome.message)
                 else -> throw IllegalStateException("Variant generation did not complete.")
@@ -45,12 +45,12 @@ class V1GenerationCoordinator(
         return outputs
     }
 
-    suspend fun shuffle(): GenerationUiState {
+    suspend fun shuffle(onState: (GenerationUiState) -> Unit = {}): GenerationUiState {
         val previous = lastRequest
             ?: return GenerationUiState.Failed("Generate an image before using Try Again.")
         val next = previous.copy(seed = V1Shuffle.nextSeed(previous.seed).seed)
         lastRequest = next
-        return run(next)
+        return run(next, onState)
     }
 
     suspend fun enhanceHd(source: Bitmap): Bitmap {
@@ -69,16 +69,19 @@ class V1GenerationCoordinator(
         }
     }
 
-    private suspend fun run(request: GenerationRequest): GenerationUiState {
+    private suspend fun run(request: GenerationRequest, onState: (GenerationUiState) -> Unit = {}): GenerationUiState {
         state = GenerationUiState.Preparing()
+        onState(state)
         return try {
             val result = imageEngine.generate(request) { raw ->
                 // A callback of NaN or a negative value must not corrupt the UI.
                 val progress = raw.takeIf { it.isFinite() }?.coerceIn(0f, 1f)
                 state = GenerationUiState.Running(progress, "Generating image…")
+                onState(state)
             }
             require(!result.image.isRecycled) { "Inference returned an invalid image." }
             state = GenerationUiState.Success(result)
+            onState(state)
             state
         } catch (cancelled: CancellationException) {
             state = GenerationUiState.Idle
@@ -88,6 +91,7 @@ class V1GenerationCoordinator(
                 error.message ?: "Image generation failed.",
                 error is ModelNotConfiguredException
             )
+            onState(state)
             state
         }
     }
