@@ -28,9 +28,62 @@ This document records the approved scope for the next product increment. Existin
 9. Before/after comparison must compare the original with a real model output.
 10. No progress animation or UI may imply generation succeeded before an inference result exists.
 
-## Deferred capabilities
+## Future development backlog — approved features
 
-Magic Brush/inpainting, Face Protect/background-only editing, generation time-lapse, non-destructive edit history, offline QR/JSON style recipes, batch editing, background removal and personal style library remain later milestones.
+These five features are explicitly accepted for future development. They are part of the product roadmap, but are not part of the current high-feasibility implementation increment. Keep their architecture seams in mind; do not add non-functional controls or claim completion before the required models and workflows are validated.
+
+### 1. Magic Brush / Selective Inpainting
+- Let users paint a mask over the region they want to change.
+- Provide brush size, erase-mask, undo/redo and clear-mask controls.
+- Convert the painted overlay into a model-resolution mask with correct coordinate mapping.
+- Run genuine masked inpainting so unmasked regions are preserved as closely as the model permits.
+- Include mask feathering and edge-aware compositing to reduce visible seams.
+- Dependencies: image-to-image/inpainting model with mask input, segmentation or mask utilities, Compose drawing overlay, memory-safe bitmap pipeline.
+- Acceptance: mask aligns with the displayed image after zoom/crop; undo/redo works; only masked area is submitted for modification; original remains untouched; low-memory failure is handled without data loss.
+
+### 2. Face Protect / Background-Only Mode
+- Detect faces locally and generate a protection mask.
+- Allow background-only transformation while retaining the original face pixels where possible.
+- Provide a user-visible mask preview and manual correction because automatic detection can fail.
+- Composite protected pixels back after generation; do not promise perfect identity preservation.
+- Dependencies: offline face detection/segmentation, mask refinement, image compositing, inference pipeline that supports masks or region preservation.
+- Acceptance: no network required; face mask can be inspected/corrected; protected source pixels are preserved by compositing; multiple faces and detection failures are handled; no identity or accuracy guarantee is implied.
+
+### 3. Generation Time-Lapse Export
+- Capture genuine intermediate generation states only when the selected inference runtime exposes them.
+- Encode a short Before → Processing → Final clip or GIF using Android-supported media APIs.
+- Make capture optional and bounded to avoid excessive memory/storage use.
+- If intermediate states are unavailable, offer a clearly labelled simple before/after transition instead; never fabricate denoising frames.
+- Dependencies: inference callbacks/intermediate tensors or decoded frames, bounded frame sampling, MediaCodec or a vetted encoder, storage permission-safe export.
+- Acceptance: exported media contains real captured states; cancellation and insufficient-storage conditions are handled; output dimensions, frame rate and file size are bounded.
+
+### 4. Non-Destructive Edit History
+- Store each generated result separately with source reference, prompt, style IDs, intensity, seed, model/version and timestamp.
+- Allow users to reopen a prior edit, adjust settings and regenerate.
+- Preserve originals; use app-private storage and explicit export/share actions.
+- Provide deletion and storage-management controls; avoid retaining unnecessary face/photo data.
+- Dependencies: Room database, app-private media storage, migration strategy, generation metadata schema.
+- Acceptance: history survives process restart; records can be reopened and regenerated when the required model is available; deleting a history item removes its managed files safely; original user photos are not overwritten.
+
+### 5. Offline Style Recipes (QR and JSON Sharing)
+- Serialize style IDs, compatible settings and optional user-authored prompt text into a versioned recipe format.
+- Export/import as JSON and QR code without requiring a server.
+- Validate schema version, payload size, known style IDs and incompatible combinations on import.
+- Treat imported text as untrusted user data; never execute code or download a model automatically.
+- Dependencies: versioned Kotlin serialization schema, QR encoder/decoder, Android Sharesheet and import flow.
+- Acceptance: recipe round-trips offline; malformed/oversized payloads are rejected safely; unknown style IDs are reported and skipped or mapped explicitly; import never changes the user's current edit until they confirm.
+
+### Future-backlog sequencing
+1. Non-Destructive Edit History and Offline Style Recipes (low coupling to model internals).
+2. Face Protect / Background-Only Mode (after validated local face/segmentation models).
+3. Magic Brush / Selective Inpainting (after mask-conditioned inference is proven).
+4. Generation Time-Lapse Export (after runtime exposes genuine intermediate states).
+
+The order may change after model/runtime benchmarks, but all five remain approved roadmap items.
+
+## Other deferred capabilities
+
+Batch editing, background removal and personal style library remain later milestones.
 
 ## Acceptance criteria
 
