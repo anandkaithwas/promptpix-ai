@@ -40,6 +40,7 @@ import coil.compose.AsyncImage
 import android.net.Uri
 import androidx.core.content.FileProvider
 import java.io.File
+import kotlinx.coroutines.launch
 
 data class Effect(val id: String, val title: String, val category: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val colors: List<Color>, val sample: String, val command: String, val instruction: String)
 private fun iconForCategory(category: String): androidx.compose.ui.graphics.vector.ImageVector = when {
@@ -101,8 +102,7 @@ private fun loadEffects(context: android.content.Context): List<Effect> {
   val item = array.getJSONObject(i); val category = item.getString("category")
   Effect(item.getString("id"),item.getString("name"),category,iconForStyle(item.getString("name"),category),colorsForCategory(category),category.uppercase(),"/"+item.getString("id"),item.getString("instruction"))
  }
- StyleCatalogueValidator.validate(loaded)
- loaded
+ return StyleCatalogueValidator.validate(loaded)
 }
 private val ink = Color(0xFF171323)
 
@@ -152,6 +152,10 @@ class MainActivity : ComponentActivity() {
 fun AuraStudioApp() {
  val context = LocalContext.current
  var editDescription by remember { mutableStateOf("") }
+ var generationState by remember { mutableStateOf<GenerationUiState>(GenerationUiState.Idle) }
+ var generatedBitmap by remember { mutableStateOf<Bitmap?>(null) }
+ val generationScope = rememberCoroutineScope()
+ val generationCoordinator = remember { V1GenerationCoordinator(UnconfiguredLocalImageGenerationEngine(), UnconfiguredSuperResolutionEngine()) }
  var editStatus by remember { mutableStateOf("Choose a photo, then describe the change you want.") }
  var generatedImageUri by remember { mutableStateOf<Uri?>(null) }
  var selectedCategory by remember { mutableStateOf("All") }
@@ -273,7 +277,7 @@ fun AuraStudioApp() {
     }
     OutlinedTextField(
      value=editDescription,
-     onValueChange={editDescription=it},
+     onValueChange={editDescription=it.take(CustomInstructionPolicy.MAX_LENGTH)},
      modifier=Modifier.fillMaxWidth(),
      label={Text("Describe the change you want")},
      placeholder={Text("e.g. Make this a warm cinematic portrait at sunset...")},
@@ -284,20 +288,63 @@ fun AuraStudioApp() {
     )
     Button(
      onClick={
-      generatedImageUri = null
-      editStatus = "AI generation is not connected yet. The selected photo and edit instructions are ready, but an image model must be integrated before an edited image can be produced."
+      val source = photoUri
+      if (source == null) {
+       editStatus = "Select a photo from Gallery or Camera before generating."
+      } else {
+       when (val validation = CustomInstructionPolicy.validate(editDescription)) {
+        is InstructionValidation.Invalid -> editStatus = validation.reason
+        is InstructionValidation.Valid -> {
+         val prompt = V1PromptInterpreter.interpret(validation.value, selectedStyles)
+         val request = GenerationRequest(
+          source = source,
+          prompt = prompt,
+          selectedStyleIds = selectedStyles.map { it.id },
+          intensity = 50,
+          seed = kotlin.random.Random.nextLong(),
+          requestedWidth = 512,
+          requestedHeight = 512
+         )
+         generatedImageUri = null
+         generatedBitmap = null
+         editStatus = "Preparing local image generation…"
+         generationScope.launch {
+          generationState = GenerationUiState.Preparing()
+          generationState = generationCoordinator.generate(request)
+          editStatus = when (val state = generationState) {
+           is GenerationUiState.Success -> {
+            generatedBitmap = state.result.image
+            "Generation complete. Your original photo remains unchanged."
+           }
+           is GenerationUiState.Failed -> state.message
+           else -> "Generation stopped."
+          }
+         }
+        }
+       }
+      }
      },
-     enabled=(photoUri!=null || cameraBitmap!=null) && (editDescription.isNotBlank() || selectedStyleIds.isNotEmpty()),
+     enabled=photoUri!=null && (editDescription.isNotBlank() || selectedStyleIds.isNotEmpty()) && generationState !is GenerationUiState.Preparing && generationState !is GenerationUiState.Running,
      modifier=Modifier.fillMaxWidth().padding(top=7.dp,bottom=8.dp),
      shape=RoundedCornerShape(14.dp)
     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Generate") }
+    if (generationState is GenerationUiState.Running) {
+     val progress = (generationState as GenerationUiState.Running).progress
+     if (progress != null) LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
+     else LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+    }
+    if (generationState is GenerationUiState.Preparing) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
+    generatedBitmap?.let { result ->
+     Text("GENERATED RESULT", color=Color(0xFFC7A8FF), fontSize=11.sp, fontWeight=FontWeight.Bold)
+     androidx.compose.foundation.Image(result.asImageBitmap(), "Generated image", Modifier.fillMaxWidth().height(240.dp), contentScale=ContentScale.Fit)
+    }
     DeviceReadinessCard(context, photoUri, cameraBitmap)
     V1CreativeControls(
      styles = selectedStyles,
      availableStyles = effects,
      customPrompt = editDescription,
-     onPromptPreview = { editStatus = "Prompt interpretation prepared locally. Actual generation still requires the local inference engine." },
+     onPromptPreview = { plan -> editStatus = "Prompt prepared (${plan.combined.length} characters). Generate sends this prompt to the local engine." },
      onRoulette = { picks ->
       selectedStyleIds.clear()
       selectedStyleIds.addAll(picks.map { it.id })
