@@ -224,6 +224,7 @@ fun AuraStudioApp() {
     DeviceReadinessCard(context, photoUri, cameraBitmap)
     V1CreativeControls(
      styles = effects.filter { it.title in selectedEffectTitles },
+     availableStyles = effects,
      customPrompt = editDescription,
      onPromptPreview = { editStatus = "Prompt interpretation prepared locally. Actual generation still requires the local inference engine." },
      onRoulette = { picks ->
