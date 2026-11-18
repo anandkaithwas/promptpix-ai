@@ -293,10 +293,15 @@ fun AuraStudioApp() {
       if (source == null) {
        editStatus = "Select a photo from Gallery or Camera before generating."
       } else {
-       when (val validation = CustomInstructionPolicy.validate(editDescription)) {
-        is InstructionValidation.Invalid -> editStatus = validation.reason
-        is InstructionValidation.Valid -> {
-         val prompt = V1PromptInterpreter.interpret(validation.value, selectedStyles)
+       val instruction = if (editDescription.isBlank() && selectedStyles.isNotEmpty()) "" else when (val validation = CustomInstructionPolicy.validate(editDescription)) {
+        is InstructionValidation.Invalid -> {
+         editStatus = validation.reason
+         null
+        }
+        is InstructionValidation.Valid -> validation.value
+       }
+       if (instruction != null) {
+         val prompt = V1PromptInterpreter.interpret(instruction, selectedStyles)
          val request = GenerationRequest(
           source = source,
           prompt = prompt,
@@ -321,7 +326,6 @@ fun AuraStudioApp() {
            else -> "Generation stopped."
           }
          }
-        }
        }
       }
      },
