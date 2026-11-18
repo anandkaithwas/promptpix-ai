@@ -12,6 +12,17 @@ Initial Kotlin foundations for all 33 V1.0 feature entries are tracked in:
 
 These are initial scaffolds. Inference, image recognition and upscaling adapters deliberately fail closed until real local model/runtime implementations are installed. The feature registry makes all 33 entries visible with honest implementation states.
 
+## Generation orchestration foundation
+
+Additional V1 code now provides:
+- `V1GenerationCoordinator.kt`: a single orchestration point for Generate, Try Again (new seed, same request settings) and optional HD enhancement, with honest idle/preparing/running/success/failure states.
+- Progress is only determinate when the engine sends a real callback; invalid callback values are discarded.
+- Cancellation is propagated and resets UI state.
+- A bounded URI-to-Bitmap decoder prepares an inference input without modifying the original.
+- `V1ShuffleTest.kt`: basic shuffle seed invariant tests.
+
+The coordinator currently receives the fail-closed engine adapters until a supported SD1.5 image-to-image runtime is integrated. The MNN runtime workflow builds native libraries only; the documented MNN demo does not itself satisfy the app's img2img requirement.
+
 ## Approved immediate scope
 
 | Feature | Planned implementation | Current status / gate |
