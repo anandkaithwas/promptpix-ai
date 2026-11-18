@@ -222,6 +222,17 @@ fun AuraStudioApp() {
     ) { Icon(Icons.Rounded.AutoAwesome,null); Spacer(Modifier.width(8.dp)); Text("Generate") }
     Text(editStatus,fontSize=10.sp,color=Color(0xFFFFD18A),modifier=Modifier.padding(bottom=8.dp))
     DeviceReadinessCard(context, photoUri, cameraBitmap)
+    V1CreativeControls(
+     styles = effects.filter { it.title in selectedEffectTitles },
+     customPrompt = editDescription,
+     onPromptPreview = { editStatus = "Prompt interpretation prepared locally. Actual generation still requires the local inference engine." },
+     onRoulette = { picks ->
+      selectedEffectTitles.clear()
+      selectedEffectTitles.addAll(picks.map { it.title })
+      editStatus = "Style roulette selected ${picks.size} compatible styles."
+     }
+    )
+    V1FeatureStatusPanel()
 
     Row(verticalAlignment=Alignment.CenterVertically) {
      Text("Explore effects",fontSize=20.sp,fontWeight=FontWeight.Bold)
