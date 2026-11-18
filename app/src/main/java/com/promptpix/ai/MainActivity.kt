@@ -186,7 +186,7 @@ fun AuraStudioApp() {
  }
  val effects = remember { loadEffects(context) }
  val categories = listOf("All") + effects.map { it.category }.distinct()
- val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && (catalogueSearch.isBlank() || it.title.contains(catalogueSearch,true) || it.category.contains(catalogueSearch,true)) }
+ val shown = effects.filter { (selectedCategory == "All" || it.category == selectedCategory) && StyleCatalogueSearch.matches(it, catalogueSearch) }
  val selectedEffect = effects.firstOrNull { it.title in selectedEffectTitles } ?: effects.first()
  MaterialTheme(colorScheme = darkColorScheme(
   primary = Color(0xFFC7A8FF), secondary = Color(0xFFFFB77D),
@@ -310,7 +310,12 @@ fun AuraStudioApp() {
      Spacer(Modifier.weight(1f)); Text("${effects.size} styles",fontSize=11.sp,color=Color(0xFFB9A9D1))
     }
     OutlinedTextField(value=catalogueSearch,onValueChange={catalogueSearch=it},modifier=Modifier.fillMaxWidth().padding(top=10.dp,bottom=8.dp),placeholder={Text("Search 275+ styles...")},leadingIcon={Icon(Icons.Rounded.Search,null)},singleLine=true,shape=RoundedCornerShape(14.dp))
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) { categories.forEach { c -> FilterChip(selected=selectedCategory==c,onClick={selectedCategory=c},label={Text(c)},shape=RoundedCornerShape(20.dp)) } }
+    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=12.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+     categories.forEach { category ->
+      val count = if (category == "All") effects.size else effects.count { it.category == category }
+      FilterChip(selected=selectedCategory==category,onClick={selectedCategory=category},label={Text("$category · $count")},shape=RoundedCornerShape(20.dp))
+     }
+    }
     if(selectedEffectTitles.isNotEmpty()) {
      Text("SELECTED STYLES (${selectedEffectTitles.size})",fontSize=10.sp,fontWeight=FontWeight.Bold,color=Color(0xFFC7A8FF),letterSpacing=1.sp,modifier=Modifier.padding(bottom=6.dp))
      Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom=10.dp),horizontalArrangement=Arrangement.spacedBy(6.dp)) { selectedEffectTitles.forEach { title -> AssistChip(onClick={selectedEffectTitles.remove(title)},label={Text(title)},leadingIcon={Icon(Icons.Rounded.CheckCircle,null)},trailingIcon={Icon(Icons.Rounded.Close,null)}) } }
