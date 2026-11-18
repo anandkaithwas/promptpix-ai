@@ -163,6 +163,6 @@ class LeanModelPackStore(context: Context) {
     }
 
     companion object {
-        private const val MIN_FREE_SPACE_BYTES = 100L * 1024L * 1024L
+        private const val MIN_FREE_SPACE_BYTES = 16L * 1024L * 1024L
     }
 }
